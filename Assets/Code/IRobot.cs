@@ -47,7 +47,8 @@ public abstract class IRobot {
         return controller.CanExecute(cmd, args);
     }
 
-    public abstract void Think();
-    public abstract void OnEnemyAhead();
+    //Methods that should be written in an external DLL
+    public void Think() { }
+    public void OnEnemyAhead() { }
 
 }
