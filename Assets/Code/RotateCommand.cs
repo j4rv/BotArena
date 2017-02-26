@@ -4,7 +4,7 @@ using UnityEngine;
 public class RotateCommand : ICommand
 {
 
-    private float speed;
+    private float speed = 0f;
 
     public RotateCommand(IRobot r)
     {

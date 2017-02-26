@@ -11,7 +11,7 @@ public abstract class IRobot {
     public Vector3 rotation;
     public Vector3 headRotation;
 
-    protected Dictionary<string, ICommand> commands;
+    protected Dictionary<Command, ICommand> commands;
 
     private HashSet<RobotInfo> enemies;
     private RobotController controller;
