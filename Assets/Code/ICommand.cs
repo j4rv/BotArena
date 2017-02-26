@@ -2,7 +2,7 @@
 
 public abstract class ICommand
 {
-    public IRobot robot;
+    public RobotController robotController;
 
     public abstract void Execute();
     public abstract bool CanExecute();

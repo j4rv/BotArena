@@ -7,9 +7,9 @@ public class RotateCommand : ICommand
 
     private float speed = 0f;
 
-    public RotateCommand(IRobot r)
+    public RotateCommand(RobotController r)
     {
-        robot = r;
+        robotController = r;
     }
 
     public void SetSpeed(float speed)
@@ -22,12 +22,22 @@ public class RotateCommand : ICommand
 
     public override bool CanExecute()
     {
-        throw new NotImplementedException();
+        bool res;
+
+        res = robotController.robot.energy >= GetStaminaCost();
+
+        return res;
     }
 
     public override void Execute()
     {
-        throw new NotImplementedException();
+        if (CanExecute())
+        {
+            Rigidbody rb = robotController.GetComponent<Rigidbody>();
+            //Rotate along the Y axis
+            Quaternion rot = Quaternion.Euler(robotController.transform.up * speed);
+            rb.MoveRotation(rot);
+        }
     }
 
     public override double GetStaminaCost()

@@ -21,7 +21,7 @@ public class RobotController : MonoBehaviour
         {
             IRobot robotInstance = (IRobot)Activator.CreateInstance(robotType);
             robot = robotInstance;
-            RotateCommand rotateCmd = new RotateCommand(robot);
+            RotateCommand rotateCmd = new RotateCommand(this);
 
             //Base commands, all robots can execute them
             commands.Add(Command.ROTATE, rotateCmd);
@@ -38,8 +38,7 @@ public class RobotController : MonoBehaviour
                 float speed = (float)args[0];
 
                 rotate.SetSpeed(speed);
-                if (rotate.CanExecute())
-                    rotate.Execute();
+                rotate.Execute();
 
                 break;
         }
