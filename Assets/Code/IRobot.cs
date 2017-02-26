@@ -10,10 +10,18 @@ public abstract class IRobot {
     public Vector3 position;
     public Vector3 rotation;
     public Vector3 headRotation;
-    private HashSet<RobotInfo> enemies;
 
     protected Dictionary<string, ICommand> commands;
-    
+
+    private HashSet<RobotInfo> enemies;
+    private RobotController controller;
+
+
+    public IRobot(RobotController parent)
+    {
+        controller = parent;
+    }
+
 
     public HashSet<IRobot> FindEnemies()
     {
@@ -28,14 +36,15 @@ public abstract class IRobot {
         return res;
     }
     
-    protected void Execute(string name, object args)
+
+    protected void Execute(string name, params object[] args)
     {
-        commands[name].Execute(args);
+        controller.Execute(name, args);
     }
 
-    protected bool CanExecute(string name, object args)
+    protected bool CanExecute(string name, params object[] args)
     {
-        return commands[name].CanExecute(args);
+        return controller.CanExecute(name, args);
     }
 
     public abstract void Think();
