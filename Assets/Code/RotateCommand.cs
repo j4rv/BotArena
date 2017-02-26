@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 public class RotateCommand : ICommand
 {
@@ -9,6 +10,12 @@ public class RotateCommand : ICommand
     public RotateCommand(IRobot r)
     {
         robot = r;
+    }
+
+    public void SetSpeed(float speed)
+    {
+        Assert.IsTrue(speed <= 1 && speed >= -1);
+        this.speed = speed;
     }
 
     //Abstract methods implemented

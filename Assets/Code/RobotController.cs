@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEngine;
 using System.Reflection;
 
@@ -19,7 +17,7 @@ public class RobotController : MonoBehaviour
         var robotType = DLL.GetType("DLL.Robot");
 
         //Checks if robotType inherits from IRobot
-        if(robotType.IsAssignableFrom(typeof(IRobot)))
+        if (robotType.IsAssignableFrom(typeof(IRobot)))
         {
             IRobot robotInstance = (IRobot)Activator.CreateInstance(robotType);
             robot = robotInstance;
@@ -31,15 +29,38 @@ public class RobotController : MonoBehaviour
 
     }
 
-    public void Execute(string name, object[] args)
+    public void Execute(Command cmd, object[] args)
     {
-        //TODO
-        throw new NotImplementedException();
+        switch (cmd)
+        {
+            case Command.ROTATE:
+                RotateCommand rotate = (RotateCommand)commands[cmd];
+                float speed = (float)args[0];
+
+                rotate.SetSpeed(speed);
+                if (rotate.CanExecute())
+                    rotate.Execute();
+
+                break;
+        }
     }
 
-    public bool CanExecute(string name, object[] args)
+    public bool CanExecute(Command cmd, object[] args)
     {
-        //TODO
-        throw new NotImplementedException();
+        bool res = false;
+
+        switch (cmd)
+        {
+            case Command.ROTATE:
+                RotateCommand rotate = (RotateCommand)commands[cmd];
+                float speed = (float)args[0];
+
+                rotate.SetSpeed(speed);
+                res = rotate.CanExecute();
+
+                break;
+        }
+
+        return res;
     }
 }
