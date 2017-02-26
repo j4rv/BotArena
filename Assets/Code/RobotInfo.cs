@@ -13,7 +13,7 @@ public class RobotInfo
     {
         health = robot.health;
         energy = robot.energy;
-        agility = robot.agility;
+        agility = robot.AGILITY;
         position = robot.position;
         rotation = robot.rotation;
         headRotation = robot.headRotation;

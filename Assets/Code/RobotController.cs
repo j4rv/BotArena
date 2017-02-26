@@ -10,6 +10,9 @@ public class RobotController : MonoBehaviour
     public GameObject head;
     public Dictionary<Command, ICommand> commands;
 
+
+    //Unity methods
+
     private void Start(string dllPath)
     {
         commands = new Dictionary<Command, ICommand>();
@@ -27,6 +30,22 @@ public class RobotController : MonoBehaviour
             commands.Add(Command.ROTATE, rotateCmd);
         }
 
+    }
+
+    private void FixedUpdate()
+    {
+        UpdateRobot();
+        robot.Think();
+        CheckEnemyAhead();
+    }
+
+    // Robot methods
+
+    public void UpdateRobot()
+    {
+        robot.position = transform.position;
+        robot.rotation = transform.rotation.eulerAngles;
+        robot.headRotation = head.transform.rotation.eulerAngles;
     }
 
     public void Execute(Command cmd, object[] args)
@@ -61,5 +80,11 @@ public class RobotController : MonoBehaviour
         }
 
         return res;
+    }
+
+    public void CheckEnemyAhead()
+    {
+        //check if there's an enemy ahead, if there is, execute robot.OnEnemyAhead()
+        //robot.OnEnemyAhead();
     }
 }

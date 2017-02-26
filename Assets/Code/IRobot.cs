@@ -6,7 +6,7 @@ public abstract class IRobot {
 
     public float health;
     public float energy;
-    public float agility;
+    public readonly float AGILITY;
     public Vector3 position;
     public Vector3 rotation;
     public Vector3 headRotation;
@@ -37,14 +37,14 @@ public abstract class IRobot {
     }
     
 
-    protected void Execute(string name, params object[] args)
+    protected void Execute(Command cmd, params object[] args)
     {
-        controller.Execute(name, args);
+        controller.Execute(cmd, args);
     }
 
-    protected bool CanExecute(string name, params object[] args)
+    protected bool CanExecute(Command cmd, params object[] args)
     {
-        return controller.CanExecute(name, args);
+        return controller.CanExecute(cmd, args);
     }
 
     public abstract void Think();
