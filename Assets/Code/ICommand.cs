@@ -2,9 +2,9 @@
 
 public abstract class ICommand
 {
-    public float staminaCost;
     public IRobot robot;
 
-    public abstract void Execute(object args);
-    public abstract bool CanExecute(object args);
+    public abstract void Execute();
+    public abstract bool CanExecute();
+    public abstract double GetStaminaCost();
 }

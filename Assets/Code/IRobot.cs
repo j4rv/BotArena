@@ -2,43 +2,18 @@
 using System;
 using System.Collections.Generic;
 
-public abstract class IRobot : MonoBehaviour {
+public abstract class IRobot {
 
-    private float health;
-    private float energy;
-    private float maxSpeed;
-    private GameObject head;
+    public float health;
+    public float energy;
+    public float agility;
+    public Vector3 position;
+    public Vector3 rotation;
+    public Vector3 headRotation;
+    private HashSet<RobotInfo> enemies;
+
     protected Dictionary<string, ICommand> commands;
-
-    public float GetHealth()
-    {
-        return health;
-    }
-
-    public float GetEnergy()
-    {
-        return energy;
-    }
-
-    public float GetMaxSpeed()
-    {
-        return maxSpeed;
-    }
-
-    public Vector3 GetPosition()
-    {
-        return transform.position;
-    }
-
-    public Vector3 GetRotation()
-    {
-        return transform.rotation.eulerAngles;
-    }
-
-    public Vector3 GetHeadRotation()
-    {
-        return head.transform.rotation.eulerAngles;
-    }
+    
 
     public HashSet<IRobot> FindEnemies()
     {
@@ -63,7 +38,7 @@ public abstract class IRobot : MonoBehaviour {
         return commands[name].CanExecute(args);
     }
 
-    protected abstract void think();
-    protected abstract void onEnemyAhead();
+    public abstract void Think();
+    public abstract void OnEnemyAhead();
 
 }
