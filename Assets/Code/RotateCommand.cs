@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.Assertions;
 
-public class RotateCommand : ICommand
+internal class RotateCommand : ICommand
 {
 
     private float speed = 0f;

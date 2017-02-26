@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class RobotInfo
+internal class RobotInfo
 {
     private float health;
     private float energy;
