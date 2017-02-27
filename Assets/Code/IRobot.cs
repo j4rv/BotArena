@@ -48,7 +48,6 @@ namespace BotArena
         protected void Execute(Command cmd, params object[] args)
         {
             controller.Execute(cmd, args);
-            Debug.Log("hi");
         }
 
         protected bool CanExecute(Command cmd, params object[] args)
@@ -56,9 +55,9 @@ namespace BotArena
             return controller.CanExecute(cmd, args);
         }
 
-        //Methods that should be written in an external DLL
-        public void Think() { }
-        public void OnEnemyAhead() { }
+        //Abstract methods
+        public abstract void Think();
+        public abstract void OnEnemyAhead();
 
     }
 }

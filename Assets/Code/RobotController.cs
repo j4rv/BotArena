@@ -15,7 +15,7 @@ namespace BotArena
 
         //Unity methods
 
-        private void Start()
+        void Start()
         {
             commands = new Dictionary<Command, ICommand>();
             robot = DLLLoader.LoadRobotFromDLL(dllPath, this);
@@ -27,11 +27,11 @@ namespace BotArena
             robot.commands = new HashSet<Command>(commands.Keys);
         }
 
-        private void FixedUpdate()
+        void FixedUpdate()
         {
-            UpdateRobot();
+            //UpdateRobot();
             robot.Think();
-            CheckEnemyAhead();
+            //CheckEnemyAhead();
         }
 
         // Robot methods
@@ -49,8 +49,7 @@ namespace BotArena
             {
                 case Command.ROTATE:
                     RotateCommand rotate = (RotateCommand)commands[cmd];
-                    float speed = (float)args[0];
-
+                    float speed = (float) Convert.ToDouble(args[0]);
                     rotate.SetSpeed(speed);
                     rotate.Execute();
 

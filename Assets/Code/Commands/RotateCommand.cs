@@ -26,6 +26,7 @@ namespace BotArena
         {
             bool res;
 
+            robotController.robot.energy = 50;
             res = robotController.robot.energy >= GetStaminaCost();
 
             return res;
@@ -37,14 +38,13 @@ namespace BotArena
             {
                 Rigidbody rb = robotController.GetComponent<Rigidbody>();
                 //Rotate along the Y axis
-                Quaternion rot = Quaternion.Euler(robotController.transform.up * speed);
-                rb.MoveRotation(rot);
+                robotController.transform.Rotate(robotController.transform.up * speed);
             }
         }
 
         public override double GetStaminaCost()
         {
-            return 5.0 * Mathf.Abs(speed);
+            return 5 * Mathf.Abs(speed);
         }
     }
 }
