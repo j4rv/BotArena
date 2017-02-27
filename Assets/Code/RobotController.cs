@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Reflection;
 
 
 public class RobotController : MonoBehaviour
@@ -9,27 +8,19 @@ public class RobotController : MonoBehaviour
     public IRobot robot;
     public GameObject head;
     public Dictionary<Command, ICommand> commands;
+    public string dllPath;
 
 
     //Unity methods
 
-    private void Start(string dllPath)
+    private void Start()
     {
         commands = new Dictionary<Command, ICommand>();
-        var DLL = Assembly.LoadFile(dllPath);
-        var robotType = DLL.GetType("DLL.Robot");
+        robot = DLLLoader.LoadRobotFromDLL(dllPath);
 
-        //Checks if robotType inherits from IRobot
-        if (robotType.IsAssignableFrom(typeof(IRobot)))
-        {
-            IRobot robotInstance = (IRobot)Activator.CreateInstance(robotType);
-            robot = robotInstance;
-            RotateCommand rotateCmd = new RotateCommand(this);
-
-            //Base commands, all robots can execute them
-            commands.Add(Command.ROTATE, rotateCmd);
-        }
-
+        //Base commands, all robots can execute them
+        RotateCommand rotateCmd = new RotateCommand(this);
+        commands.Add(Command.ROTATE, rotateCmd);
     }
 
     private void FixedUpdate()
