@@ -48,6 +48,7 @@ namespace BotArena
         protected void Execute(Command cmd, params object[] args)
         {
             controller.Execute(cmd, args);
+            Debug.Log("hi");
         }
 
         protected bool CanExecute(Command cmd, params object[] args)

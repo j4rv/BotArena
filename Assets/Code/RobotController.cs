@@ -18,7 +18,7 @@ namespace BotArena
         private void Start()
         {
             commands = new Dictionary<Command, ICommand>();
-            robot = DLLLoader.LoadRobotFromDLL(dllPath);
+            robot = DLLLoader.LoadRobotFromDLL(dllPath, this);
 
             //Base commands, all robots can execute them
             RotateCommand rotateCmd = new RotateCommand(this);
