@@ -23,6 +23,11 @@ public abstract class IRobot {
     }
 
 
+    public RobotInfo GetRobotInfo()
+    {
+        return new RobotInfo(this);
+    }
+
     public HashSet<IRobot> FindEnemies()
     {
         HashSet<IRobot> res = new HashSet<IRobot>();

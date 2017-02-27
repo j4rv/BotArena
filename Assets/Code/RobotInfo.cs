@@ -2,12 +2,12 @@
 
 public class RobotInfo
 {
-    private float health;
-    private float energy;
-    private float agility;
-    private Vector3 position;
-    private Vector3 rotation;
-    private Vector3 headRotation;
+    public float health;
+    public float energy;
+    public float agility;
+    public Vector3 position;
+    public Vector3 rotation;
+    public Vector3 headRotation;
 
     public RobotInfo(IRobot robot)
     {
