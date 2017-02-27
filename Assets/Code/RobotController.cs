@@ -21,6 +21,8 @@ public class RobotController : MonoBehaviour
         //Base commands, all robots can execute them
         RotateCommand rotateCmd = new RotateCommand(this);
         commands.Add(Command.ROTATE, rotateCmd);
+
+        robot.commands = new HashSet<Command>(commands.Keys);
     }
 
     private void FixedUpdate()

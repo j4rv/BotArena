@@ -10,8 +10,7 @@ public abstract class IRobot {
     public Vector3 position;
     public Vector3 rotation;
     public Vector3 headRotation;
-
-    protected Dictionary<Command, ICommand> commands;
+    public HashSet<Command> commands;
 
     private HashSet<RobotInfo> enemies;
     private RobotController controller;
