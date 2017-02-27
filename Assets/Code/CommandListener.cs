@@ -2,7 +2,7 @@
 using System;
 using System.Reflection;
 
-internal class CommandListener : MonoBehaviour
+public class CommandListener : MonoBehaviour
 {
     void FixedUpdate()
     {

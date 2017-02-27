@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-internal abstract class ICommand
+public abstract class ICommand
 {
     public RobotController robotController;
 

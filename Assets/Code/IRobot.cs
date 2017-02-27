@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-internal abstract class IRobot {
+public abstract class IRobot {
 
     public float health;
     public float energy;

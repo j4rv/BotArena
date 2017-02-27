@@ -4,7 +4,7 @@ using UnityEngine;
 using System.Reflection;
 
 
-internal class RobotController : MonoBehaviour
+public class RobotController : MonoBehaviour
 {
     public IRobot robot;
     public GameObject head;
