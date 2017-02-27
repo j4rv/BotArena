@@ -3,81 +3,84 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class RobotController : MonoBehaviour
+namespace BotArena
 {
-    public IRobot robot;
-    public GameObject head;
-    public Dictionary<Command, ICommand> commands;
-    public string dllPath;
-
-
-    //Unity methods
-
-    private void Start()
+    public class RobotController : MonoBehaviour
     {
-        commands = new Dictionary<Command, ICommand>();
-        robot = DLLLoader.LoadRobotFromDLL(dllPath);
+        public IRobot robot;
+        public GameObject head;
+        public Dictionary<Command, ICommand> commands;
+        public string dllPath;
 
-        //Base commands, all robots can execute them
-        RotateCommand rotateCmd = new RotateCommand(this);
-        commands.Add(Command.ROTATE, rotateCmd);
 
-        robot.commands = new HashSet<Command>(commands.Keys);
-    }
+        //Unity methods
 
-    private void FixedUpdate()
-    {
-        UpdateRobot();
-        robot.Think();
-        CheckEnemyAhead();
-    }
-
-    // Robot methods
-
-    public void UpdateRobot()
-    {
-        robot.position = transform.position;
-        robot.rotation = transform.rotation.eulerAngles;
-        robot.headRotation = head.transform.rotation.eulerAngles;
-    }
-
-    public void Execute(Command cmd, object[] args)
-    {
-        switch (cmd)
+        private void Start()
         {
-            case Command.ROTATE:
-                RotateCommand rotate = (RotateCommand)commands[cmd];
-                float speed = (float)args[0];
+            commands = new Dictionary<Command, ICommand>();
+            robot = DLLLoader.LoadRobotFromDLL(dllPath);
 
-                rotate.SetSpeed(speed);
-                rotate.Execute();
+            //Base commands, all robots can execute them
+            RotateCommand rotateCmd = new RotateCommand(this);
+            commands.Add(Command.ROTATE, rotateCmd);
 
-                break;
-        }
-    }
-
-    public bool CanExecute(Command cmd, object[] args)
-    {
-        bool res = false;
-
-        switch (cmd)
-        {
-            case Command.ROTATE:
-                RotateCommand rotate = (RotateCommand)commands[cmd];
-                float speed = (float)args[0];
-
-                rotate.SetSpeed(speed);
-                res = rotate.CanExecute();
-
-                break;
+            robot.commands = new HashSet<Command>(commands.Keys);
         }
 
-        return res;
-    }
+        private void FixedUpdate()
+        {
+            UpdateRobot();
+            robot.Think();
+            CheckEnemyAhead();
+        }
 
-    public void CheckEnemyAhead()
-    {
-        //check if there's an enemy ahead, if there is, execute robot.OnEnemyAhead()
-        //robot.OnEnemyAhead();
+        // Robot methods
+
+        public void UpdateRobot()
+        {
+            robot.position = transform.position;
+            robot.rotation = transform.rotation.eulerAngles;
+            robot.headRotation = head.transform.rotation.eulerAngles;
+        }
+
+        public void Execute(Command cmd, object[] args)
+        {
+            switch (cmd)
+            {
+                case Command.ROTATE:
+                    RotateCommand rotate = (RotateCommand)commands[cmd];
+                    float speed = (float)args[0];
+
+                    rotate.SetSpeed(speed);
+                    rotate.Execute();
+
+                    break;
+            }
+        }
+
+        public bool CanExecute(Command cmd, object[] args)
+        {
+            bool res = false;
+
+            switch (cmd)
+            {
+                case Command.ROTATE:
+                    RotateCommand rotate = (RotateCommand)commands[cmd];
+                    float speed = (float)args[0];
+
+                    rotate.SetSpeed(speed);
+                    res = rotate.CanExecute();
+
+                    break;
+            }
+
+            return res;
+        }
+
+        public void CheckEnemyAhead()
+        {
+            //check if there's an enemy ahead, if there is, execute robot.OnEnemyAhead()
+            //robot.OnEnemyAhead();
+        }
     }
 }

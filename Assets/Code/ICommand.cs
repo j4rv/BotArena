@@ -1,10 +1,13 @@
 ﻿using UnityEngine;
 
-public abstract class ICommand
+namespace BotArena
 {
-    public RobotController robotController;
+    public abstract class ICommand
+    {
+        public RobotController robotController;
 
-    public abstract void Execute();
-    public abstract bool CanExecute();
-    public abstract double GetStaminaCost();
+        public abstract void Execute();
+        public abstract bool CanExecute();
+        public abstract double GetStaminaCost();
+    }
 }

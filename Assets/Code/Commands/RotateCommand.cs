@@ -2,47 +2,49 @@
 using UnityEngine;
 using UnityEngine.Assertions;
 
-internal class RotateCommand : ICommand
+namespace BotArena
 {
-
-    private float speed = 0f;
-
-    public RotateCommand(RobotController r)
+    internal class RotateCommand : ICommand
     {
-        robotController = r;
-    }
 
-    public void SetSpeed(float speed)
-    {
-        Assert.IsTrue(speed <= 1 && speed >= -1);
-        this.speed = speed;
-    }
+        private float speed = 0f;
 
-    //Abstract methods implemented
-
-    public override bool CanExecute()
-    {
-        bool res;
-
-        res = robotController.robot.energy >= GetStaminaCost();
-
-        return res;
-    }
-
-    public override void Execute()
-    {
-        if (CanExecute())
+        public RotateCommand(RobotController r)
         {
-            Rigidbody rb = robotController.GetComponent<Rigidbody>();
-            //Rotate along the Y axis
-            Quaternion rot = Quaternion.Euler(robotController.transform.up * speed);
-            rb.MoveRotation(rot);
+            robotController = r;
+        }
+
+        public void SetSpeed(float speed)
+        {
+            Assert.IsTrue(speed <= 1 && speed >= -1);
+            this.speed = speed;
+        }
+
+        //Abstract methods implemented
+
+        public override bool CanExecute()
+        {
+            bool res;
+
+            res = robotController.robot.energy >= GetStaminaCost();
+
+            return res;
+        }
+
+        public override void Execute()
+        {
+            if (CanExecute())
+            {
+                Rigidbody rb = robotController.GetComponent<Rigidbody>();
+                //Rotate along the Y axis
+                Quaternion rot = Quaternion.Euler(robotController.transform.up * speed);
+                rb.MoveRotation(rot);
+            }
+        }
+
+        public override double GetStaminaCost()
+        {
+            return 5.0 * Mathf.Abs(speed);
         }
     }
-
-    public override double GetStaminaCost()
-    {
-        return 5.0 * Mathf.Abs(speed);
-    }
 }
-
