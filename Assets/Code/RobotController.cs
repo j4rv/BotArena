@@ -22,7 +22,9 @@ namespace BotArena
 
             //Base commands, all robots can execute them
             RotateCommand rotateCmd = new RotateCommand(this);
+            RotateGunCommand rotateGunCmd = new RotateGunCommand(this);
             commands.Add(Command.ROTATE, rotateCmd);
+            commands.Add(Command.ROTATEGUN, rotateGunCmd);
 
             robot.commands = new HashSet<Command>(commands.Keys);
         }
@@ -48,12 +50,24 @@ namespace BotArena
             switch (cmd)
             {
                 case Command.ROTATE:
-                    RotateCommand rotate = (RotateCommand)commands[cmd];
-                    float speed = (float) Convert.ToDouble(args[0]);
-                    rotate.SetSpeed(speed);
-                    rotate.Execute();
+                    { 
+                        RotateCommand rotate = (RotateCommand)commands[cmd];
+                        float speed = (float) Convert.ToDouble(args[0]);
+                        rotate.SetSpeed(speed);
+                        rotate.Execute();
 
-                    break;
+                        break;
+                    }
+
+                case Command.ROTATEGUN:
+                    { 
+                        RotateGunCommand rotateGun = (RotateGunCommand)commands[cmd];
+                        float speed = (float)Convert.ToDouble(args[0]);
+                        rotateGun.SetSpeed(speed);
+                        rotateGun.Execute();
+
+                        break;
+                    }
             }
         }
 
