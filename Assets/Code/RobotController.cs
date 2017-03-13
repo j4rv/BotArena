@@ -11,7 +11,9 @@ namespace BotArena
         public GameObject head;
         public Dictionary<Command, ICommand> commands;
         public string dllPath;
+        public int thinkEveryXTimeSteps = 2;
 
+        private long timesteps;
 
         //Unity methods
 
@@ -19,6 +21,7 @@ namespace BotArena
         {
             commands = new Dictionary<Command, ICommand>();
             robot = DLLLoader.LoadRobotFromDLL(dllPath, this);
+            timesteps = 0;
 
             //Base commands, all robots can execute them
             RotateCommand rotateCmd = new RotateCommand(this);
@@ -31,9 +34,13 @@ namespace BotArena
 
         void FixedUpdate()
         {
-            //UpdateRobot();
-            robot.Think();
-            //CheckEnemyAhead();
+            if (timesteps % thinkEveryXTimeSteps == 0)
+            {
+                //UpdateRobot();
+                robot.Think();
+                //CheckEnemyAhead();
+            }
+            timesteps++;
         }
 
         // Robot methods
