@@ -15,7 +15,7 @@ namespace BotArena
 
         public void SetSpeed(float speed)
         {
-            Assert.IsTrue(speed <= 1 && speed >= -1);
+            speed = Mathf.Clamp(speed, -1, 1);
             this.speed = speed;
         }
 

@@ -63,7 +63,7 @@ namespace BotArena
                     { 
                         RotateGunCommand rotateGun = (RotateGunCommand)commands[cmd];
                         float speed = (float)Convert.ToDouble(args[0]);
-                        rotateGun.SetSpeed(speed);
+                        rotateGun.SetSpeed(speed * 2);
                         rotateGun.Execute();
 
                         break;
