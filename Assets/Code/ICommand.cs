@@ -8,6 +8,6 @@ namespace BotArena
 
         public abstract void Execute();
         public abstract bool CanExecute();
-        public abstract double GetStaminaCost();
+        public abstract float GetStaminaCost();
     }
 }

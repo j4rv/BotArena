@@ -1,5 +1,5 @@
 ﻿
 namespace BotArena
 {
-    public enum Command { ROTATE, ROTATEGUN, SHOOT, ACCELERATE, JUMP }
+    public enum Command { ROTATE, ROTATEGUN, SHOOT, ACCELERATE, PROPEL }
 }

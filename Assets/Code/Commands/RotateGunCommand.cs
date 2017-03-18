@@ -24,9 +24,8 @@ namespace BotArena
         public override bool CanExecute()
         {
             bool res;
-
-            robotController.robot.energy = 50;
-            res = robotController.robot.energy >= GetStaminaCost();
+            
+            res = robotController.robot.GetEnergy() >= GetStaminaCost();
 
             return res;
         }
@@ -38,12 +37,13 @@ namespace BotArena
                 Transform gun = ChildFinder.FindChildWithTag(robotController.gameObject, "Gun");
                 //Rotate along the Y axis
                 gun.Rotate(gun.transform.up * speed);
+                robotController.robot.ConsumeEnergy(GetStaminaCost());
             }
         }
 
-        public override double GetStaminaCost()
+        public override float GetStaminaCost()
         {
-            return 5 * Mathf.Abs(speed);
+            return Mathf.Abs(speed) * 0.1f;
         }
     }
 }

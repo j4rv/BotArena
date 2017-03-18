@@ -7,43 +7,55 @@ namespace BotArena
 {
     public abstract class IRobot
     {
-
-        public float health;
-        public float energy;
-        public readonly float AGILITY;
-        public Vector3 position;
-        public Vector3 rotation;
-        public Vector3 headRotation;
-        public HashSet<Command> commands;
-
-        private HashSet<RobotInfo> enemies;
+        private float maxHp;
+        private float health;
+        private float maxEnergy;
+        private float energy;
+        private float agility;
         private RobotController controller;
 
+        public string name;
+        public RobotInfo info;
+        public HashSet<RobotInfo> enemies;
+        
 
         public IRobot(RobotController parent)
         {
+            maxHp = 100;
+            maxEnergy = 100;
+            health = maxHp;
+            energy = maxEnergy;
+
+            info = new RobotInfo();
             controller = parent;
         }
+        
 
+        //              ROBOT METHODS
 
-        public RobotInfo GetRobotInfo()
+        public float GetEnergy()
         {
-            return new RobotInfo(this);
+            return energy;
         }
 
-        public HashSet<IRobot> FindEnemies()
+        public void ConsumeEnergy(float consumption)
         {
-            HashSet<IRobot> res = new HashSet<IRobot>();
-            GameObject[] robots = GameObject.FindGameObjectsWithTag("Robot");
-
-            foreach (GameObject robot in robots)
-            {
-                res.Add(robot.GetComponent<IRobot>());
+            if(consumption >= 0) { 
+                energy -= consumption;
             }
-
-            return res;
         }
 
+        public void UpdateInfo(Vector3 pos, Vector3 rot, Vector3 gunRot)
+        {
+            info.health = health;
+            info.energy = energy;
+            info.agility = agility;
+            info.position = pos;
+            info.rotation = rot;
+            info.gunRotation = gunRot;
+        }
+
+        //              COMMAND METHODS
 
         protected void Execute(Command cmd, params object[] args)
         {
@@ -55,7 +67,8 @@ namespace BotArena
             return controller.CanExecute(cmd, args);
         }
 
-        //Abstract methods
+        //              ABSTRACT METHODS
+
         public abstract void Think();
         public abstract void OnEnemyAhead();
 

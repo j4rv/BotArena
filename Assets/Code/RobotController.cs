@@ -8,14 +8,15 @@ namespace BotArena
     public class RobotController : MonoBehaviour
     {
         public IRobot robot;
-        public GameObject head;
+        public GameObject gun;
         public Dictionary<Command, ICommand> commands;
         public string dllPath;
         public int thinkEveryXTimeSteps = 2;
 
         private long timesteps;
 
-        //Unity methods
+
+        //              UNITY METHODS
 
         void Start()
         {
@@ -28,29 +29,45 @@ namespace BotArena
             RotateGunCommand rotateGunCmd = new RotateGunCommand(this);
             commands.Add(Command.ROTATE, rotateCmd);
             commands.Add(Command.ROTATEGUN, rotateGunCmd);
-
-            robot.commands = new HashSet<Command>(commands.Keys);
         }
 
         void FixedUpdate()
         {
             if (timesteps % thinkEveryXTimeSteps == 0)
             {
-                //UpdateRobot();
+                UpdateRobot();
                 robot.Think();
+                Debug.Log(robot.GetEnergy());
                 //CheckEnemyAhead();
             }
             timesteps++;
         }
 
-        // Robot methods
+
+        //              ROBOT METHODS
 
         public void UpdateRobot()
         {
-            robot.position = transform.position;
-            robot.rotation = transform.rotation.eulerAngles;
-            robot.headRotation = head.transform.rotation.eulerAngles;
+            Vector3 pos = transform.position;
+            Vector3 rot = transform.rotation.eulerAngles;
+            Vector3 gunRot = gun.transform.rotation.eulerAngles;
         }
+
+        public HashSet<IRobot> FindEnemies()
+        {
+            HashSet<IRobot> res = new HashSet<IRobot>();
+            GameObject[] robots = GameObject.FindGameObjectsWithTag("Robot");
+
+            foreach (GameObject robot in robots)
+            {
+                res.Add(robot.GetComponent<IRobot>());
+            }
+
+            return res;
+        }
+
+
+        //              COMMAND METHODS
 
         public void Execute(Command cmd, object[] args)
         {

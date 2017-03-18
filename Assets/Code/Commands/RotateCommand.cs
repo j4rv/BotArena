@@ -25,9 +25,8 @@ namespace BotArena
         public override bool CanExecute()
         {
             bool res;
-
-            robotController.robot.energy = 50;
-            res = robotController.robot.energy >= GetStaminaCost();
+            
+            res = robotController.robot.GetEnergy() >= GetStaminaCost();
 
             return res;
         }
@@ -39,12 +38,13 @@ namespace BotArena
                 Rigidbody rb = robotController.GetComponent<Rigidbody>();
                 //Rotate along the Y axis
                 robotController.transform.Rotate(robotController.transform.up * speed);
+                robotController.robot.ConsumeEnergy(GetStaminaCost());
             }
         }
 
-        public override double GetStaminaCost()
+        public override float GetStaminaCost()
         {
-            return 5 * Mathf.Abs(speed);
+            return Mathf.Abs(speed) * 0.1f;
         }
     }
 }
