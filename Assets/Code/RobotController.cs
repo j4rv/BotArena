@@ -102,13 +102,26 @@ namespace BotArena
             switch (cmd)
             {
                 case Command.ROTATE:
-                    RotateCommand rotate = (RotateCommand)commands[cmd];
-                    float speed = (float)args[0];
+                    { 
+                        RotateCommand rotate = (RotateCommand)commands[cmd];
+                        float speed = (float)Convert.ToDouble(args[0]);
 
-                    rotate.SetSpeed(speed);
-                    res = rotate.CanExecute();
+                        rotate.SetSpeed(speed);
+                        res = rotate.CanExecute();
 
-                    break;
+                        break;
+                    }
+
+                case Command.ROTATEGUN:
+                    { 
+                        RotateGunCommand rotateGun = (RotateGunCommand)commands[cmd];
+                        float speed = (float)Convert.ToDouble(args[0]);
+
+                        rotateGun.SetSpeed(speed);
+                        res = rotateGun.CanExecute();
+
+                        break;
+                    }
             }
 
             return res;
@@ -117,7 +130,7 @@ namespace BotArena
         public void CheckEnemyAhead()
         {
             //check if there's an enemy ahead, if there is, execute robot.OnEnemyAhead()
-            //robot.OnEnemyAhead();
+            robot.OnEnemyAhead();
         }
     }
 }
