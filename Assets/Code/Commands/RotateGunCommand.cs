@@ -34,9 +34,8 @@ namespace BotArena
         {
             if (CanExecute())
             {
-                Transform gun = ChildFinder.FindChildWithTag(robotController.gameObject, "Gun");
                 //Rotate along the Y axis
-                gun.Rotate(gun.transform.up * speed);
+                robotController.gun.transform.Rotate(robotController.gun.transform.up * speed);
                 robotController.robot.ConsumeEnergy(GetStaminaCost());
             }
         }

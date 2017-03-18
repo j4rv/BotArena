@@ -35,7 +35,6 @@ namespace BotArena
         {
             if (CanExecute())
             {
-                Rigidbody rb = robotController.GetComponent<Rigidbody>();
                 //Rotate along the Y axis
                 robotController.transform.Rotate(robotController.transform.up * speed);
                 robotController.robot.ConsumeEnergy(GetStaminaCost());
