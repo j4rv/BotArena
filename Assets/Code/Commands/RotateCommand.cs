@@ -43,7 +43,7 @@ namespace BotArena
 
         public override float GetStaminaCost()
         {
-            return Mathf.Abs(speed) * 0.1f;
+            return Mathf.Abs(speed) / robotController.robot.GetAgility();
         }
     }
 }

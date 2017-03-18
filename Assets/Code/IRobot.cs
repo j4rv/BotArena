@@ -25,6 +25,7 @@ namespace BotArena
             maxEnergy = 100;
             health = maxHp;
             energy = maxEnergy;
+            agility = 10;
 
             info = new RobotInfo();
             controller = parent;
@@ -43,6 +44,11 @@ namespace BotArena
             if(consumption >= 0) { 
                 energy -= consumption;
             }
+        }
+
+        public float GetAgility()
+        {
+            return agility;
         }
 
         public void UpdateInfo(Vector3 pos, Vector3 rot, Vector3 gunRot)
