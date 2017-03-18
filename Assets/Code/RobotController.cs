@@ -7,12 +7,14 @@ namespace BotArena
 {
     public class RobotController : MonoBehaviour
     {
-        public IRobot robot;
-        public GameObject gun;
-        public Dictionary<Command, ICommand> commands;
-        public string dllPath;
-        public int thinkEveryXTimeSteps = 2;
+        private string dllPath;
+        [SerializeField]
+        private GameObject gun;
 
+        public IRobot robot;
+        public Dictionary<Command, ICommand> commands;
+
+        public int thinkEveryXTimeSteps = 2;
         private long timesteps;
 
 
