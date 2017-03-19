@@ -12,12 +12,14 @@ namespace BotArena
         private RobotController controller;
         private bool executed;
         private SortedList<Command, ICommand> commands;
+        private int turn;
 
 
-        public Order(RobotController controller)
+        public Order(RobotController controller, int turn)
         {
             commands = new SortedList<Command, ICommand>();
             this.controller = controller;
+            this.turn = turn;
         }
 
         public bool IsExecuted()
@@ -30,6 +32,12 @@ namespace BotArena
         {
             lock (this)
                 executed = true;
+        }
+
+        public int GetTurn()
+        {
+            lock (this)
+                return turn;
         }
 
         public List<ICommand> GetCommands()

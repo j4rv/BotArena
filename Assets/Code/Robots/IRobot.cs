@@ -29,8 +29,7 @@ namespace BotArena
             info.rotation = rot;
             info.gunRotation = gunRot;
         }
-
-
+        
         //              ABSTRACT METHODS
 
         public virtual void Think(Order order) { }

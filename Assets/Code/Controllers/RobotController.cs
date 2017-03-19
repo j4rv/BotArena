@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
+using System.Linq;
 
 
 namespace BotArena
@@ -21,11 +22,12 @@ namespace BotArena
         [SerializeField]
         private float agility;
 
-        private Thread robotThread;
-        
+        private RobotThread robotThread;
+
         public IRobot robot;
         public GameObject gun;
-        public Dictionary<int, Order> orders;
+        public List<Order> orders;
+        public HashSet<Command> avaliableCommands;
 
 
         //              UNITY METHODS
@@ -38,25 +40,28 @@ namespace BotArena
             energy = maxEnergy;
             agility = 10;
 
-            orders = new Dictionary<int, Order>();
+            orders = new List<Order>();
+            avaliableCommands = new HashSet<Command>();
             robot = DLLLoader.LoadRobotFromDLL(dllPath, this);
+            avaliableCommands = CommandFactory.AvaliableCommands(robot);
             transform.name = robot.name;
+            robotThread = new RobotThread();
         }
 
         void FixedUpdate()
         {
             if (TurnController.IsTurnUpdate())
             {
+                int turn = TurnController.GetCurrentTurn();
                 //Recover some energy
                 energy = Mathf.Clamp(energy + 1, 0, maxEnergy);
                 UpdateRobot();
                 ExecuteLastOrder();
 
-                Order order = new Order(this);
-                orders.Add(TurnController.GetCurrentTurn(), order);
+                Order order = new Order(this, turn);
+                orders.Add(order);
 
-                robotThread = new Thread(() => robot.Think(order));
-                robotThread.Start();
+                robotThread.NewJob(() => robot.Think(order));
 
                 CheckEnemyAhead(order);
             }
@@ -110,18 +115,20 @@ namespace BotArena
         private void ExecuteLastOrder()
         {
             int lastTurn = TurnController.GetCurrentTurn() - 1;
+            Order lastOrder = orders.LastOrDefault(); //LastOrDefault because Last will throw an exception on the first turn.
 
-            if (orders.ContainsKey(lastTurn)){ 
-                Order order = orders[TurnController.GetCurrentTurn() - 1];
-                if (order.IsExecuted() == false) { 
-                    List<ICommand> commands = order.GetCommands();
+            if (lastOrder != null
+                && lastOrder.GetTurn() == lastTurn
+                && lastOrder.IsExecuted() == false)
+            {
+                List<ICommand> commands = lastOrder.GetCommands();
 
-                    foreach (ICommand cmd in commands)
-                    {
-                        cmd.Execute();
-                    }
-                    order.Executed();
+                foreach (ICommand cmd in commands)
+                {
+                    cmd.Execute();
                 }
+                lastOrder.Executed();
+
             }
         }
 
@@ -129,10 +136,10 @@ namespace BotArena
         {
             //check if there's an enemy ahead, if there is, execute robot.OnEnemyAhead()
             //TODO
-                        
+
             RobotInfo enemyInfo = new RobotInfo();
-            robotThread = new Thread(() => robot.OnEnemyDetected(order, enemyInfo));
-            robotThread.Start();
+            
+            robotThread.NewJob(() => robot.Think(order));
         }
     }
 }
