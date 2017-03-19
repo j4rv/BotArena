@@ -1,14 +1,15 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace BotArena
 {
-    internal class RotateGunCommand : ICommand
+    internal class GoForwardCommand : ICommand
     {
 
         private float speed = 0f;
 
-        public RotateGunCommand(RobotController r)
+        public GoForwardCommand(RobotController r)
         {
             robotController = r;
         }
@@ -34,15 +35,16 @@ namespace BotArena
         {
             if (CanExecute())
             {
-                //Rotate along the Y axis
-                robotController.gun.transform.Rotate(robotController.gun.transform.up * speed * 2);
+                //Go forward
+                Transform body = robotController.body.transform;
+                robotController.GetComponent<Rigidbody>().AddForce(body.forward * 1000 * speed);
                 robotController.ConsumeEnergy(GetStaminaCost());
             }
         }
 
         public override float GetStaminaCost()
         {
-            return Mathf.Abs(speed) / robotController.GetAgility();
+            return Mathf.Abs(speed) * 2 / robotController.GetAgility();
         }
     }
 }

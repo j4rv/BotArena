@@ -27,8 +27,18 @@ namespace BotArena
                     {
                         RotateGunCommand rotateGun = new RotateGunCommand(controller);
                         float speed = (float)Convert.ToDouble(args[0]);
-                        rotateGun.SetSpeed(speed * 2);
+                        rotateGun.SetSpeed(speed);
                         res = rotateGun;
+
+                        break;
+                    }
+
+                case Command.GOFORWARD:
+                    {
+                        GoForwardCommand goForward = new GoForwardCommand(controller);
+                        float speed = (float)Convert.ToDouble(args[0]);
+                        goForward.SetSpeed(speed);
+                        res = goForward;
 
                         break;
                     }
@@ -44,6 +54,7 @@ namespace BotArena
             //common commands
             res.Add(Command.ROTATE);
             res.Add(Command.ROTATEGUN);
+            res.Add(Command.GOFORWARD);
 
             if(robot is ITank)
             {

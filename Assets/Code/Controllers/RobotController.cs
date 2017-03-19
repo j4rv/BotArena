@@ -22,11 +22,11 @@ namespace BotArena
         [SerializeField]
         private float agility;
 
-        private RobotThread robotThread;
 
         public IRobot robot;
         public GameObject gun;
-        public List<Order> orders;
+        public GameObject body;
+        public RobotThreadShadedData robotData;
         public HashSet<Command> avaliableCommands;
 
 
@@ -40,29 +40,30 @@ namespace BotArena
             energy = maxEnergy;
             agility = 10;
 
-            orders = new List<Order>();
+            robotData = new RobotThreadShadedData();
             avaliableCommands = new HashSet<Command>();
             robot = DLLLoader.LoadRobotFromDLL(dllPath, this);
             avaliableCommands = CommandFactory.AvaliableCommands(robot);
             transform.name = robot.name;
-            robotThread = new RobotThread();
         }
 
         void FixedUpdate()
         {
             if (TurnController.IsTurnUpdate())
-            {
-                int turn = TurnController.GetCurrentTurn();
-                //Recover some energy
-                energy = Mathf.Clamp(energy + 1, 0, maxEnergy);
+            {      
+                energy = Mathf.Clamp(energy + 0.075f, 0, maxEnergy);    //Recover some energy
+
                 UpdateRobot();
                 ExecuteLastOrder();
 
+                int turn = TurnController.GetCurrentTurn();
                 Order order = new Order(this, turn);
-                orders.Add(order);
+                robotData.orders.Add(order);
+                robotData.events.Clear();
+                
+                CheckEnemyAhead();
 
-                robotThread.NewJob(() => robot.Think(order));
-                CheckEnemyAhead(order);
+                robot.StartTurn(robotData);
             }
         }
 
@@ -114,7 +115,7 @@ namespace BotArena
         private void ExecuteLastOrder()
         {
             int lastTurn = TurnController.GetCurrentTurn() - 1;
-            Order lastOrder = orders.LastOrDefault(); //LastOrDefault because Last will throw an exception on the first turn.
+            Order lastOrder = robotData.GetLastOrder(); 
 
             if (lastOrder != null
                 && lastOrder.GetTurn() == lastTurn
@@ -127,24 +128,24 @@ namespace BotArena
                     cmd.Execute();
                 }
                 lastOrder.Executed();
-
             }
         }
 
-        private void CheckEnemyAhead(Order order)
+        private void CheckEnemyAhead()
         {
             //check if there's an enemy ahead, if there is, execute robot.OnEnemyAhead()
             //TODO
             RaycastHit hit;
 
-            if (Physics.Raycast(transform.position, gun.transform.forward, out hit)) { 
-                if(hit.collider.isTrigger)
-                    if(hit.transform.tag == "Robot")
-                    {
-                        RobotController hitRobotController = hit.transform.GetComponent<RobotController>();
-                        RobotInfo enemyInfo = hitRobotController.robot.info;
-                        robotThread.NewJob(() => robot.OnEnemyDetected(order, enemyInfo));
-                    }
+            if (Physics.Raycast(transform.position, gun.transform.forward, out hit))
+            {
+                if (hit.transform.tag == "Robot")
+                {
+                    RobotController hitRobotController = hit.transform.GetComponent<RobotController>();
+                    RobotInfo enemyInfo = hitRobotController.robot.info;
+                    RobotDetectedEvent e = new RobotDetectedEvent(enemyInfo);
+                    robotData.events.Add(e);
+                }
             }
         }
 

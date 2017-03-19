@@ -7,38 +7,39 @@ namespace BotArena
     public class RobotThread
     {
         private Thread thread;
-        private List<ThreadStart> jobs;
+        private ThreadStart turn;
+
+        //              CONSTRUCTORS
 
         public RobotThread()
         {
-            jobs = new List<ThreadStart>();
             thread = new Thread(Nothing);
-            thread.Priority = ThreadPriority.BelowNormal;
+            thread.Priority = ThreadPriority.Lowest;
         }
 
-        public RobotThread(ThreadStart function)
+        public RobotThread(RobotThreadShadedData robotData)
         {
-            thread = new Thread(function);
-            thread.Priority = ThreadPriority.BelowNormal;
+            thread.Priority = ThreadPriority.Lowest;
             thread.Start();
         }
 
-        public void NewJob(ThreadStart job)
+        //              TURN HANDLERS
+
+        public void newTurn(ThreadStart turn)
         {
-            jobs.Add(job);
-            WaitAndStartNextJob();
+            this.turn = turn;
+            StartNewTurn();
         }
 
-        public void WaitAndStartNextJob()
+        public void StartNewTurn()
         {
-            while (thread.IsAlive) { }
-
-            ThreadStart job = jobs.Last();
-            jobs.Remove(job);
-
-            thread = new Thread(job);
-            thread.Start();
+            //If the thread is still alive, the robot loses a turn.
+            if (!thread.IsAlive) { 
+                thread = new Thread(turn);
+                thread.Start();
+            }
         }
+
 
         private void Nothing() { }
     }

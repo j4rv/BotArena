@@ -10,8 +10,6 @@ namespace BotArena
         [SerializeField]
         private long timeSteps;
         [SerializeField]
-        private int turnSteps;
-        [SerializeField]
         private int currentTurn;
 
         private static TurnController instance;
@@ -34,21 +32,12 @@ namespace BotArena
 
         public static int GetCurrentTurn()
         {
-            return instance.currentTurn;
+            return Get().currentTurn;
         }
 
         public static bool IsTurnUpdate()
         {
-            bool res = false;
-
-            if(Get().turnSteps <= 0)
-            {
-                res = true;
-            } else {
-                res = (Get().timeSteps % Get().turnSteps) == 0;
-            }
-
-            return res;
+            return Get().timeSteps % 2 == 0;
         }
     }
 }
