@@ -11,7 +11,7 @@ namespace BotArena
     {
         public IRobot robot;
         public GameObject gun;
-        public GameObject body;
+        public BodyController body;
         private RobotThreadShadedData robotData;
         private HashSet<Command> avaliableCommands;
 
@@ -50,7 +50,7 @@ namespace BotArena
         {
             if (TurnController.IsTurnUpdate())
             {      
-                energy = Mathf.Clamp(energy + 0.075f, 0, maxEnergy);    //Recover some energy
+                energy = Mathf.Clamp(energy + 1, 0, maxEnergy);    //Recover some energy
 
                 UpdateRobot();
                 ExecuteLastOrder();
@@ -70,7 +70,6 @@ namespace BotArena
         private Collision LastColision;
         void OnCollisionEnter(Collision collision)
         {
-            Debug.Log("collision");
             LastColision = collision;
         }
 
@@ -165,6 +164,7 @@ namespace BotArena
             {
                 WallHitEvent e = new WallHitEvent(LastColision);
                 robotData.events.Add(e);
+                LastColision = null;
             }
         }
 

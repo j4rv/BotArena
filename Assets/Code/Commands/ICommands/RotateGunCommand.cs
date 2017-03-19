@@ -15,7 +15,7 @@ namespace BotArena
 
         public void SetSpeed(float speed)
         {
-            speed = Mathf.Clamp(speed, -1, 1);
+            speed = Mathf.Clamp(speed, -5, 5);
             this.speed = speed;
         }
 
@@ -35,7 +35,7 @@ namespace BotArena
             if (CanExecute())
             {
                 //Rotate along the Y axis
-                robotController.gun.transform.Rotate(robotController.gun.transform.up * speed * 2);
+                robotController.gun.transform.Rotate(robotController.gun.transform.up * speed);
                 robotController.ConsumeEnergy(GetStaminaCost());
             }
         }

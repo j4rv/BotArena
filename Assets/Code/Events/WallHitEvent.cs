@@ -8,7 +8,6 @@ namespace BotArena
 
         public WallHitEvent(Collision wallCollision)
         {
-            Debug.Log("Wallhit");
             this.wallCollision = wallCollision;
         }
     }

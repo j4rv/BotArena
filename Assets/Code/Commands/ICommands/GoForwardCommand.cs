@@ -16,7 +16,7 @@ namespace BotArena
 
         public void SetSpeed(float speed)
         {
-            speed = Mathf.Clamp(speed, -1, 1);
+            speed = Mathf.Clamp(speed, -5, 5);
             this.speed = speed;
         }
 
@@ -26,7 +26,8 @@ namespace BotArena
         {
             bool res;
             
-            res = robotController.GetEnergy() >= GetStaminaCost();
+            res = robotController.GetEnergy() >= GetStaminaCost()
+                && robotController.body.CanMove();
 
             return res;
         }
@@ -36,15 +37,14 @@ namespace BotArena
             if (CanExecute())
             {
                 //Go forward
-                Transform body = robotController.body.transform;
-                robotController.GetComponent<Rigidbody>().AddForce(body.forward * 10 * speed, ForceMode.Impulse);
+                robotController.GetComponent<Rigidbody>().velocity = robotController.transform.forward * speed;
                 robotController.ConsumeEnergy(GetStaminaCost());
             }
         }
 
         public override float GetStaminaCost()
         {
-            return Mathf.Abs(speed) * 2 / robotController.GetAgility();
+            return Mathf.Abs(speed) / robotController.GetAgility();
         }
     }
 }
