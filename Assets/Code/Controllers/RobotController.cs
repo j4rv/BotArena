@@ -9,6 +9,12 @@ namespace BotArena
 {
     public class RobotController : MonoBehaviour
     {
+        public IRobot robot;
+        public GameObject gun;
+        public GameObject body;
+        private RobotThreadShadedData robotData;
+        private HashSet<Command> avaliableCommands;
+
         [SerializeField]
         private string dllPath;
         [SerializeField]
@@ -21,14 +27,7 @@ namespace BotArena
         private float energy;
         [SerializeField]
         private float agility;
-
-
-        public IRobot robot;
-        public GameObject gun;
-        public GameObject body;
-        public RobotThreadShadedData robotData;
-        public HashSet<Command> avaliableCommands;
-
+        
 
         //              UNITY METHODS
 
@@ -67,6 +66,12 @@ namespace BotArena
             }
         }
 
+        private Collision LastColision;
+        void OnCollisionEnter(Collision collision)
+        {
+            LastColision = collision;
+        }
+
 
         //              ROBOT METHODS
 
@@ -96,7 +101,7 @@ namespace BotArena
             return agility;
         }
 
-        private HashSet<IRobot> FindEnemies()
+        /*private HashSet<IRobot> FindEnemies()
         {
             HashSet<IRobot> res = new HashSet<IRobot>();
             GameObject[] robots = GameObject.FindGameObjectsWithTag("Robot");
@@ -107,10 +112,10 @@ namespace BotArena
             }
 
             return res;
-        }
+        }*/
 
-
-        //              COMMAND METHODS
+        
+        //              ORDER METHODS
 
         private void ExecuteLastOrder()
         {
@@ -131,6 +136,9 @@ namespace BotArena
             }
         }
 
+
+        //              EVENT CHECKERS
+
         private void CheckEnemyAhead()
         {
             //check if there's an enemy ahead, if there is, execute robot.OnEnemyAhead()
@@ -146,6 +154,14 @@ namespace BotArena
                     RobotDetectedEvent e = new RobotDetectedEvent(enemyInfo);
                     robotData.events.Add(e);
                 }
+            }
+        }
+
+        private void CheckWallHit()
+        {
+            if(LastColision.transform.tag == "Wall")
+            {
+
             }
         }
 

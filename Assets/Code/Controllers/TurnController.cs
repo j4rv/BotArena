@@ -37,6 +37,7 @@ namespace BotArena
 
         public static bool IsTurnUpdate()
         {
+            //A turn every two timesteps
             return Get().timeSteps % 2 == 0;
         }
     }
