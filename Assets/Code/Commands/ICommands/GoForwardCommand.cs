@@ -37,7 +37,7 @@ namespace BotArena
             {
                 //Go forward
                 Transform body = robotController.body.transform;
-                robotController.GetComponent<Rigidbody>().AddForce(body.forward * 1000 * speed);
+                robotController.GetComponent<Rigidbody>().AddForce(body.forward * 10 * speed, ForceMode.Impulse);
                 robotController.ConsumeEnergy(GetStaminaCost());
             }
         }

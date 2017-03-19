@@ -59,5 +59,6 @@ namespace BotArena
 
         public virtual void Think(Order order) { }
         public virtual void OnEnemyDetected(Order order, RobotInfo enemyInfo) { }
+        public virtual void OnWallHit(Collision wallCollision) { }
     }
 }

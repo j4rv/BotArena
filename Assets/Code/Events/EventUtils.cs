@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿
 namespace BotArena
 {
     public class EventUtils
@@ -11,8 +7,12 @@ namespace BotArena
         {
             if(e is RobotDetectedEvent)
             {
-                RobotDetectedEvent robotDetected = (RobotDetectedEvent) e;
+                RobotDetectedEvent robotDetected = (RobotDetectedEvent)e;
                 robot.OnEnemyDetected(order, robotDetected.enemyInfo);
+            } else if (e is WallHitEvent)
+            {
+                WallHitEvent wallHit = (WallHitEvent)e;
+                robot.OnWallHit(wallHit.wallCollision);
             }
         }
     }

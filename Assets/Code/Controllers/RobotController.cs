@@ -61,6 +61,7 @@ namespace BotArena
                 robotData.events.Clear();
                 
                 CheckEnemyAhead();
+                CheckWallHit();
 
                 robot.StartTurn(robotData);
             }
@@ -69,6 +70,7 @@ namespace BotArena
         private Collision LastColision;
         void OnCollisionEnter(Collision collision)
         {
+            Debug.Log("collision");
             LastColision = collision;
         }
 
@@ -159,9 +161,10 @@ namespace BotArena
 
         private void CheckWallHit()
         {
-            if(LastColision.transform.tag == "Wall")
+            if(LastColision != null && LastColision.transform.tag == "Wall")
             {
-
+                WallHitEvent e = new WallHitEvent(LastColision);
+                robotData.events.Add(e);
             }
         }
 
