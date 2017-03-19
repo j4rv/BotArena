@@ -62,7 +62,6 @@ namespace BotArena
                 orders.Add(order);
 
                 robotThread.NewJob(() => robot.Think(order));
-
                 CheckEnemyAhead(order);
             }
         }
@@ -136,10 +135,18 @@ namespace BotArena
         {
             //check if there's an enemy ahead, if there is, execute robot.OnEnemyAhead()
             //TODO
+            RaycastHit hit;
 
-            RobotInfo enemyInfo = new RobotInfo();
-            
-            robotThread.NewJob(() => robot.Think(order));
+            if (Physics.Raycast(transform.position, gun.transform.forward, out hit)) { 
+                if(hit.collider.isTrigger)
+                    if(hit.transform.tag == "Robot")
+                    {
+                        RobotController hitRobotController = hit.transform.GetComponent<RobotController>();
+                        RobotInfo enemyInfo = hitRobotController.robot.info;
+                        robotThread.NewJob(() => robot.OnEnemyDetected(order, enemyInfo));
+                    }
+            }
         }
+
     }
 }
