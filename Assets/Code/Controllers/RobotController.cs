@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
 
@@ -9,33 +10,55 @@ namespace BotArena
     {
         [SerializeField]
         private string dllPath;
+        [SerializeField]
+        private float maxHp;
+        [SerializeField]
+        private float health;
+        [SerializeField]
+        private float maxEnergy;
+        [SerializeField]
+        private float energy;
+        [SerializeField]
+        private float agility;
 
+        private Thread robotThread;
+        
         public IRobot robot;
         public GameObject gun;
-        public Dictionary<Command, ICommand> commands;
+        public Dictionary<int, Order> orders;
 
 
         //              UNITY METHODS
 
         void Start()
         {
-            commands = new Dictionary<Command, ICommand>();
-            robot = DLLLoader.LoadRobotFromDLL(dllPath, this);
+            maxHp = 100;
+            maxEnergy = 100;
+            health = maxHp;
+            energy = maxEnergy;
+            agility = 10;
 
-            //Base commands, all robots can execute them
-            RotateCommand rotateCmd = new RotateCommand(this);
-            RotateGunCommand rotateGunCmd = new RotateGunCommand(this);
-            commands.Add(Command.ROTATE, rotateCmd);
-            commands.Add(Command.ROTATEGUN, rotateGunCmd);
+            orders = new Dictionary<int, Order>();
+            robot = DLLLoader.LoadRobotFromDLL(dllPath, this);
+            transform.name = robot.name;
         }
 
         void FixedUpdate()
         {
             if (TurnController.IsTurnUpdate())
             {
+                //Recover some energy
+                energy = Mathf.Clamp(energy + 1, 0, maxEnergy);
                 UpdateRobot();
-                robot.Think();
-                //CheckEnemyAhead();
+                ExecuteLastOrder();
+
+                Order order = new Order(this);
+                orders.Add(TurnController.GetCurrentTurn(), order);
+
+                robotThread = new Thread(() => robot.Think(order));
+                robotThread.Start();
+
+                CheckEnemyAhead(order);
             }
         }
 
@@ -47,9 +70,28 @@ namespace BotArena
             Vector3 pos = transform.position;
             Vector3 rot = transform.rotation.eulerAngles;
             Vector3 gunRot = gun.transform.rotation.eulerAngles;
+            robot.UpdateInfo(health, energy, agility, pos, rot, gunRot);
         }
 
-        public HashSet<IRobot> FindEnemies()
+        public float GetEnergy()
+        {
+            return energy;
+        }
+
+        public void ConsumeEnergy(float consumption)
+        {
+            if (consumption >= 0)
+            {
+                energy -= consumption;
+            }
+        }
+
+        public float GetAgility()
+        {
+            return agility;
+        }
+
+        private HashSet<IRobot> FindEnemies()
         {
             HashSet<IRobot> res = new HashSet<IRobot>();
             GameObject[] robots = GameObject.FindGameObjectsWithTag("Robot");
@@ -65,68 +107,32 @@ namespace BotArena
 
         //              COMMAND METHODS
 
-        public void Execute(Command cmd, object[] args)
+        private void ExecuteLastOrder()
         {
-            switch (cmd)
-            {
-                case Command.ROTATE:
-                    { 
-                        RotateCommand rotate = (RotateCommand)commands[cmd];
-                        float speed = (float) Convert.ToDouble(args[0]);
-                        rotate.SetSpeed(speed);
-                        rotate.Execute();
+            int lastTurn = TurnController.GetCurrentTurn() - 1;
 
-                        break;
+            if (orders.ContainsKey(lastTurn)){ 
+                Order order = orders[TurnController.GetCurrentTurn() - 1];
+                if (order.IsExecuted() == false) { 
+                    List<ICommand> commands = order.GetCommands();
+
+                    foreach (ICommand cmd in commands)
+                    {
+                        cmd.Execute();
                     }
-
-                case Command.ROTATEGUN:
-                    { 
-                        RotateGunCommand rotateGun = (RotateGunCommand)commands[cmd];
-                        float speed = (float)Convert.ToDouble(args[0]);
-                        rotateGun.SetSpeed(speed * 2);
-                        rotateGun.Execute();
-
-                        break;
-                    }
+                    order.Executed();
+                }
             }
         }
 
-        public bool CanExecute(Command cmd, object[] args)
-        {
-            bool res = false;
-
-            switch (cmd)
-            {
-                case Command.ROTATE:
-                    { 
-                        RotateCommand rotate = (RotateCommand)commands[cmd];
-                        float speed = (float)Convert.ToDouble(args[0]);
-
-                        rotate.SetSpeed(speed);
-                        res = rotate.CanExecute();
-
-                        break;
-                    }
-
-                case Command.ROTATEGUN:
-                    { 
-                        RotateGunCommand rotateGun = (RotateGunCommand)commands[cmd];
-                        float speed = (float)Convert.ToDouble(args[0]);
-
-                        rotateGun.SetSpeed(speed);
-                        res = rotateGun.CanExecute();
-
-                        break;
-                    }
-            }
-
-            return res;
-        }
-
-        public void CheckEnemyAhead()
+        private void CheckEnemyAhead(Order order)
         {
             //check if there's an enemy ahead, if there is, execute robot.OnEnemyAhead()
-            robot.OnEnemyAhead();
+            //TODO
+                        
+            RobotInfo enemyInfo = new RobotInfo();
+            robotThread = new Thread(() => robot.OnEnemyDetected(order, enemyInfo));
+            robotThread.Start();
         }
     }
 }

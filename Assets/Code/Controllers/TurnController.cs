@@ -32,6 +32,11 @@ namespace BotArena
             timeSteps++;
         }
 
+        public static int GetCurrentTurn()
+        {
+            return instance.currentTurn;
+        }
+
         public static bool IsTurnUpdate()
         {
             bool res = false;
