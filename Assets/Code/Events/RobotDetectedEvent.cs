@@ -7,11 +7,11 @@ namespace BotArena
 {
     public class RobotDetectedEvent : Event
     {
-        public RobotInfo enemyInfo;
+        public RobotInfo robotInfo;
 
-        public RobotDetectedEvent(RobotInfo enemyInfo)
+        public RobotDetectedEvent(RobotInfo robotInfo)
         {
-            this.enemyInfo = enemyInfo;
+            this.robotInfo = robotInfo;
         }
     }
 }

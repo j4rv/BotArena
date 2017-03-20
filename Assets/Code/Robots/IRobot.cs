@@ -13,7 +13,6 @@ namespace BotArena
         public HashSet<RobotInfo> enemies;
 
         private RobotThread robotThread;
-        private RobotThreadShadedData robotData;
 
         public IRobot(RobotController parent)
         {
@@ -26,7 +25,6 @@ namespace BotArena
 
         public void StartTurn(RobotThreadShadedData robotData)
         {
-            this.robotData = robotData;
             robotThread.newTurn(() => Run(robotData));
         }
 
@@ -58,7 +56,7 @@ namespace BotArena
         //              ABSTRACT METHODS
 
         public virtual void Think(Order order) { }
-        public virtual void OnEnemyDetected(Order order, RobotInfo enemyInfo) { }
+        public virtual void OnRobotDetected(Order order, RobotInfo robotInfo) { }
         public virtual void OnWallHit(Collision wallCollision) { }
     }
 }

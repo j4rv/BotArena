@@ -8,7 +8,7 @@ namespace BotArena
             if(e is RobotDetectedEvent)
             {
                 RobotDetectedEvent robotDetected = (RobotDetectedEvent)e;
-                robot.OnEnemyDetected(order, robotDetected.enemyInfo);
+                robot.OnRobotDetected(order, robotDetected.robotInfo);
             } else if (e is WallHitEvent)
             {
                 WallHitEvent wallHit = (WallHitEvent)e;

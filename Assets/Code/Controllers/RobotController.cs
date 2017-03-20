@@ -12,7 +12,7 @@ namespace BotArena
         public IRobot robot;
         public GameObject gun;
         public BodyController body;
-        private RobotThreadShadedData robotData;
+        private RobotThreadShadedData threadData;
         private HashSet<Command> avaliableCommands;
 
         [SerializeField]
@@ -39,7 +39,7 @@ namespace BotArena
             energy = maxEnergy;
             agility = 10;
 
-            robotData = new RobotThreadShadedData();
+            threadData = new RobotThreadShadedData();
             avaliableCommands = new HashSet<Command>();
             robot = DLLLoader.LoadRobotFromDLL(dllPath, this);
             avaliableCommands = CommandFactory.AvaliableCommands(robot);
@@ -57,13 +57,13 @@ namespace BotArena
 
                 int turn = TurnController.GetCurrentTurn();
                 Order order = new Order(this, turn);
-                robotData.orders.Add(order);
-                robotData.events.Clear();
+                threadData.orders.Add(order);
+                threadData.events.Clear();
                 
-                CheckEnemyAhead();
+                CheckRobotAhead();
                 CheckWallHit();
 
-                robot.StartTurn(robotData);
+                robot.StartTurn(threadData);
             }
         }
 
@@ -121,7 +121,7 @@ namespace BotArena
         private void ExecuteLastOrder()
         {
             int lastTurn = TurnController.GetCurrentTurn() - 1;
-            Order lastOrder = robotData.GetLastOrder(); 
+            Order lastOrder = threadData.GetLastOrder(); 
 
             if (lastOrder != null
                 && lastOrder.GetTurn() == lastTurn
@@ -131,6 +131,7 @@ namespace BotArena
 
                 foreach (ICommand cmd in commands)
                 {
+                    //Check if command is in avaliableCommands
                     cmd.Execute();
                 }
                 lastOrder.Executed();
@@ -140,10 +141,8 @@ namespace BotArena
 
         //              EVENT CHECKERS
 
-        private void CheckEnemyAhead()
+        private void CheckRobotAhead()
         {
-            //check if there's an enemy ahead, if there is, execute robot.OnEnemyAhead()
-            //TODO
             RaycastHit hit;
 
             if (Physics.Raycast(transform.position, gun.transform.forward, out hit))
@@ -153,7 +152,7 @@ namespace BotArena
                     RobotController hitRobotController = hit.transform.GetComponent<RobotController>();
                     RobotInfo enemyInfo = hitRobotController.robot.info;
                     RobotDetectedEvent e = new RobotDetectedEvent(enemyInfo);
-                    robotData.events.Add(e);
+                    threadData.events.Add(e);
                 }
             }
         }
@@ -163,7 +162,7 @@ namespace BotArena
             if(LastColision != null && LastColision.transform.tag == "Wall")
             {
                 WallHitEvent e = new WallHitEvent(LastColision);
-                robotData.events.Add(e);
+                threadData.events.Add(e);
                 LastColision = null;
             }
         }

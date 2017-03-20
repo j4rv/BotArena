@@ -16,12 +16,7 @@ namespace BotArena
             thread = new Thread(Nothing);
             thread.Priority = ThreadPriority.Lowest;
         }
-
-        public RobotThread(RobotThreadShadedData robotData)
-        {
-            thread.Priority = ThreadPriority.Lowest;
-            thread.Start();
-        }
+        
 
         //              TURN HANDLERS
 
@@ -31,7 +26,7 @@ namespace BotArena
             StartNewTurn();
         }
 
-        public void StartNewTurn()
+        private void StartNewTurn()
         {
             //If the thread is still alive, the robot loses a turn.
             if (!thread.IsAlive) { 
