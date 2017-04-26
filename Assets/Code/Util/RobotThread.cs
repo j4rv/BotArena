@@ -7,7 +7,7 @@ namespace BotArena
     public class RobotThread
     {
         private Thread thread;
-        private ThreadStart turn;
+        private ThreadStart threadStart;
 
         //              CONSTRUCTORS
 
@@ -20,9 +20,9 @@ namespace BotArena
 
         //              TURN HANDLERS
 
-        public void newTurn(ThreadStart turn)
+        public void newTurn(ThreadStart threadStart)
         {
-            this.turn = turn;
+            this.threadStart = threadStart;
             StartNewTurn();
         }
 
@@ -30,7 +30,7 @@ namespace BotArena
         {
             //If the thread is still alive, the robot loses a turn.
             if (!thread.IsAlive) { 
-                thread = new Thread(turn);
+                thread = new Thread(threadStart);
                 thread.Start();
             }
         }
