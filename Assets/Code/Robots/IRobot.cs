@@ -25,7 +25,7 @@ namespace BotArena
 
         public void StartTurn(RobotThreadShadedData robotData)
         {
-            robotThread.newTurn(() => Run(robotData));
+            robotThread.newTurn(() => Run(robotData), robotData);
         }
 
         //This runs on robotThread.

@@ -41,7 +41,7 @@ namespace BotArena
 
             threadData = new RobotThreadShadedData();
             avaliableCommands = new HashSet<Command>();
-            robot = DLLLoader.LoadRobotFromDLL(dllPath, this);
+            robot = DllUtil.LoadRobotFromDll(dllPath, this);
             avaliableCommands = CommandFactory.AvaliableCommands(robot);
             transform.name = robot.name;
         }

@@ -4,7 +4,8 @@ namespace BotArena
 {
     public abstract class ICommand
     {
-        public RobotController robotController;
+        protected RobotController robotController;
+        protected bool deletable = false;
 
         public abstract void Execute();
         public abstract bool CanExecute();
