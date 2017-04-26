@@ -49,21 +49,8 @@ namespace BotArena
         void FixedUpdate()
         {
             if (TurnController.IsTurnUpdate())
-            {      
-                energy = Mathf.Clamp(energy + 1, 0, maxEnergy);    //Recover some energy
-
-                UpdateRobot();
-                ExecuteLastOrder();
-
-                int turn = TurnController.GetCurrentTurn();
-                Order order = new Order(this, turn);
-                threadData.orders.Add(order);
-                threadData.events.Clear();
-                
-                CheckRobotAhead();
-                CheckWallHit();
-
-                robot.StartTurn(threadData);
+            {
+                TurnUpdate();
             }
         }
 
@@ -89,17 +76,21 @@ namespace BotArena
             return energy;
         }
 
-        public void ConsumeEnergy(float consumption)
+        internal void ConsumeEnergy(float consumption)
         {
             if (consumption >= 0)
-            {
                 energy -= consumption;
-            }
         }
 
         public float GetAgility()
         {
             return agility;
+        }
+
+        internal void TakeDamage(float damage)
+        {
+            if (damage >= 0)
+                health -= damage;
         }
 
         /*private HashSet<IRobot> FindEnemies()
@@ -114,9 +105,29 @@ namespace BotArena
 
             return res;
         }*/
+                    
+        //              TURN METHODS
 
-        
-        //              ORDER METHODS
+        private void TurnUpdate()
+        {
+            bool turnLost = false;
+            energy = Mathf.Clamp(energy + 1, 0, maxEnergy);    //Recover some energy
+
+            UpdateRobot();
+            ExecuteLastOrder();
+
+            int turn = TurnController.GetCurrentTurn();
+            Order order = new Order(this, turn);
+            threadData.orders.Add(order);
+            threadData.events.Clear();
+
+            CheckRobotAhead();
+            CheckWallHit();
+
+            turnLost = ! robot.StartTurn(threadData);
+            if (turnLost)
+                TakeDamage(10);
+        }
 
         private void ExecuteLastOrder()
         {

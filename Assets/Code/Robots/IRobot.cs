@@ -23,9 +23,9 @@ namespace BotArena
 
         //              THREAD METHODS
 
-        public void StartTurn(RobotThreadShadedData robotData)
+        public bool StartTurn(RobotThreadShadedData robotData)
         {
-            robotThread.newTurn(() => Run(robotData), robotData);
+            return robotThread.newTurn(() => Run(robotData));
         }
 
         //This runs on robotThread.
@@ -36,7 +36,7 @@ namespace BotArena
             Think(order);
             foreach(Event e in robotData.events)
             {
-                EventUtils.HandleEvent(e, order, this);
+                EventHandler.HandleEvent(e, order, this);
             }
         }
         
