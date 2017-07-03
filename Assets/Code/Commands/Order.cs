@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 //http://stackoverflow.com/questions/1360533/how-to-share-data-between-different-threads-in-c-sharp-using-aop
 //https://msdn.microsoft.com/en-us/library/aa645740(VS.71).aspx#vcwlkthreadingtutorialexample1creating

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using System.Linq;
 
 
 namespace BotArena
@@ -12,7 +9,7 @@ namespace BotArena
         public IRobot robot;
         public GameObject gun;
         public BodyController body;
-        private RobotThreadShadedData threadData;
+        private RobotThreadSharedData threadData;
         private HashSet<Command> avaliableCommands;
 
         [SerializeField]
@@ -39,7 +36,7 @@ namespace BotArena
             energy = maxEnergy;
             agility = 10;
 
-            threadData = new RobotThreadShadedData();
+            threadData = new RobotThreadSharedData();
             avaliableCommands = new HashSet<Command>();
             robot = DllUtil.LoadRobotFromDll(dllPath, this);
             avaliableCommands = CommandFactory.AvaliableCommands(robot);
