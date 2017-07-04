@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace BotArena
 {
@@ -17,30 +18,27 @@ namespace BotArena
             this.power = power;
         }
 
-        //Abstract methods implemented
-        
-        public override bool CanExecute()
+        protected override int GetCooldown()
         {
-            bool res;
-
-            res = robotController.GetEnergy() >= GetStaminaCost();
-
-            return res;
+            return 5;
         }
 
-        public override void Execute()
+        //Abstract methods implemented
+        
+        protected override void Execute()
         {
-            if (CanExecute())
-            {
-                //Tell the robot to attack!
-                robotController.weapon.Attack(power);
-                robotController.ConsumeEnergy(GetStaminaCost());
-            }
+            robotController.weapon.Attack(power);
+            robotController.ConsumeEnergy(GetStaminaCost());    
         }
 
         public override float GetStaminaCost()
         {
             return power * robotController.weapon.GetStaminaCost();
+        }
+
+        public override Command GetCommand()
+        {
+            return Command.ATTACK;
         }
     }
 }

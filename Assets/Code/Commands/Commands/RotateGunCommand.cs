@@ -19,29 +19,22 @@ namespace BotArena
         }
 
         //Abstract methods implemented
-
-        public override bool CanExecute()
-        {
-            bool res;
-            
-            res = robotController.GetEnergy() >= GetStaminaCost();
-
-            return res;
-        }
-
-        public override void Execute()
-        {
-            if (CanExecute())
-            {
-                //Rotate along the Y axis
-                robotController.weapon.transform.Rotate(robotController.weapon.transform.up * speed);
-                robotController.ConsumeEnergy(GetStaminaCost());
-            }
+        
+        protected override void Execute()
+        {            
+             //Rotate along the Y axis
+             robotController.weapon.transform.RotateAround(robotController.transform.position, robotController.transform.up, speed);
+             robotController.ConsumeEnergy(GetStaminaCost());
         }
 
         public override float GetStaminaCost()
         {
             return Mathf.Abs(speed) / robotController.GetAgility();
+        }
+
+        public override Command GetCommand()
+        {
+            return Command.ROTATEGUN;
         }
     }
 }

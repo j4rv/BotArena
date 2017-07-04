@@ -2,7 +2,7 @@
 
 namespace BotArena
 {
-    public class TurnController : MonoBehaviour
+    public class TurnManager : MonoBehaviour
     {
 
         [SerializeField]
@@ -10,12 +10,12 @@ namespace BotArena
         [SerializeField]
         private int currentTurn;
 
-        private static TurnController instance;
+        private static TurnManager instance;
 
-        private static TurnController Get()
+        private static TurnManager Get()
         {
             if (instance == null)
-                instance = (TurnController)FindObjectOfType(typeof(TurnController));
+                instance = (TurnManager) FindObjectOfType(typeof(TurnManager));
             return instance;
         }
 

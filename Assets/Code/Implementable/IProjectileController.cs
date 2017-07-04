@@ -28,6 +28,8 @@ namespace BotArena
                 RobotController robot = collision.gameObject.GetComponent<RobotController>();
                 RobotHit(robot);
             }
+            //TODO: Instantiate some kind of collision effect
+            Destroy(gameObject);
         }
 
     }
