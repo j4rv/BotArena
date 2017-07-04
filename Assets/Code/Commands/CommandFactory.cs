@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace BotArena
 {
@@ -40,23 +39,16 @@ namespace BotArena
 
                         break;
                     }
-            }
 
-            return res;
-        }
+                case Command.ATTACK:
+                    {
+                        AttackCommand attack = new AttackCommand(controller);
+                        float power = (float)Convert.ToDouble(args[0]);
+                        attack.SetPower(power);
+                        res = attack;
 
-        public static HashSet<Command> AvaliableCommands(IRobot robot)
-        {
-            HashSet<Command> res = new HashSet<Command>();
-
-            //common commands
-            res.Add(Command.ROTATE);
-            res.Add(Command.ROTATEGUN);
-            res.Add(Command.GOFORWARD);
-
-            if(robot is ITank)
-            {
-                //...
+                        break;
+                    }
             }
 
             return res;

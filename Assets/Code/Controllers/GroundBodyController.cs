@@ -8,7 +8,7 @@ namespace BotArena
 
         void OnCollisionEnter(Collision collision)
         {
-            if (collision.transform.tag == "Ground")
+            if (collision.transform.tag == Tags.GROUND)
             {
                 onTheGround = true;
             }
@@ -16,7 +16,7 @@ namespace BotArena
 
         void OnCollisionExit(Collision collision)
         {
-            if (collision.transform.tag == "Ground")
+            if (collision.transform.tag == Tags.GROUND)
             {
                 onTheGround = false;
             }

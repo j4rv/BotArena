@@ -7,10 +7,9 @@ namespace BotArena
     public class RobotController : MonoBehaviour
     {
         public IRobot robot;
-        public GameObject gun;
+        public IWeaponController weapon;
         public BodyController body;
         private RobotThreadSharedData threadData;
-        private HashSet<Command> avaliableCommands;
 
         [SerializeField]
         private string dllPath;
@@ -37,9 +36,7 @@ namespace BotArena
             agility = 10;
 
             threadData = new RobotThreadSharedData();
-            avaliableCommands = new HashSet<Command>();
             robot = DllUtil.LoadRobotFromDll(dllPath, this);
-            avaliableCommands = CommandFactory.AvaliableCommands(robot);
             transform.name = robot.name;
         }
 
@@ -64,7 +61,7 @@ namespace BotArena
         {
             Vector3 pos = transform.position;
             Vector3 rot = transform.rotation.eulerAngles;
-            Vector3 gunRot = gun.transform.rotation.eulerAngles;
+            Vector3 gunRot = weapon.transform.rotation.eulerAngles;
             robot.UpdateInfo(health, energy, agility, pos, rot, gunRot);
         }
 
@@ -90,7 +87,7 @@ namespace BotArena
                 health -= damage;
         }
 
-        /*private HashSet<IRobot> FindEnemies()
+        private HashSet<IRobot> FindEnemies()
         {
             HashSet<IRobot> res = new HashSet<IRobot>();
             GameObject[] robots = GameObject.FindGameObjectsWithTag("Robot");
@@ -101,7 +98,7 @@ namespace BotArena
             }
 
             return res;
-        }*/
+        }
                     
         //              TURN METHODS
 
@@ -123,7 +120,7 @@ namespace BotArena
 
             turnLost = ! robot.StartTurn(threadData);
             if (turnLost)
-                TakeDamage(10);
+                TakeDamage(10);  
         }
 
         private void ExecuteLastOrder()
@@ -153,7 +150,7 @@ namespace BotArena
         {
             RaycastHit hit;
 
-            if (Physics.Raycast(transform.position, gun.transform.forward, out hit))
+            if (Physics.Raycast(transform.position, weapon.transform.forward, out hit))
             {
                 if (hit.transform.tag == "Robot")
                 {
