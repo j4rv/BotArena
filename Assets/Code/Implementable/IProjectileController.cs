@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace BotArena
 {
-    public abstract class IProjectileController : MonoBehaviour
+    internal abstract class IProjectileController : MonoBehaviour
     {
         protected IWeaponController weapon;
 

@@ -2,9 +2,9 @@
 
 namespace BotArena
 {
-    public abstract class ICommand
+    internal abstract class ICommand
     {
-        protected RobotController robotController;
+        protected internal RobotController robotController;
         protected bool deletable = false;
 
         public bool Call()

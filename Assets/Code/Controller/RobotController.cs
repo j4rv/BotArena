@@ -4,12 +4,17 @@ using UnityEngine;
 
 namespace BotArena
 {
-    public class RobotController : MonoBehaviour
+    internal class RobotController : MonoBehaviour
     {
         public IRobot robot;
-        public IWeaponController weapon;
-        public BodyController body;
         private RobotThreadSharedData robotThreadSharedData;
+
+        [SerializeField]
+        public IWeaponController weapon;
+        [SerializeField]
+        public BodyController body;
+        [SerializeField]
+        private Transform radar;
 
         [SerializeField]
         private string dllPath;
@@ -35,9 +40,10 @@ namespace BotArena
             energy = maxEnergy;
             agility = 10;
 
+            robot = DllUtil.LoadRobotFromDll(dllPath);
+            transform.name = robot.GetName();
+
             robotThreadSharedData = new RobotThreadSharedData();
-            robot = DllUtil.LoadRobotFromDll(dllPath, this);
-            transform.name = robot.name;
         }
 
         void FixedUpdate()
@@ -142,7 +148,6 @@ namespace BotArena
                 && lastOrder.GetTurn() == lastTurn      //If the robot missed the last turn, this would return false
                 && lastOrder.IsExecuted() == false)
             {
-                lastOrder.AddCommand(Command.ATTACK, Random.Range(0.5f, 5)); //For debug
                 List<ICommand> commands = lastOrder.GetCommands();
 
                 foreach (ICommand cmd in commands)
@@ -191,7 +196,7 @@ namespace BotArena
         {
             RaycastHit hit;
 
-            if (Physics.Raycast(transform.position, body.transform.forward, out hit))
+            if (Physics.Raycast(transform.position, radar.transform.forward, out hit))
             {
                 if (hit.transform.tag == Tags.ROBOT)
                 {

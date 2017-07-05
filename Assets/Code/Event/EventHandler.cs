@@ -4,12 +4,12 @@ namespace BotArena
 {
     public class EventHandler
     {
-        public static void HandleEvent(Event eventToHandle, Order order, IRobot robot)
+        public static void HandleEvent(Event eventToHandle, IRobot robot)
         {
             if (eventToHandle is RobotDetectedEvent)
             {
                 RobotDetectedEvent robotDetected = (RobotDetectedEvent) eventToHandle;
-                robot.OnRobotDetected(order, robotDetected.robotInfo);
+                robot.OnRobotDetected(robotDetected.robotInfo);
             }
 
             else if (eventToHandle is WallHitEvent)

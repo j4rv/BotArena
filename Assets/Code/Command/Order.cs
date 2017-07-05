@@ -13,7 +13,7 @@ namespace BotArena
         private int turn;
 
 
-        public Order(RobotController controller, int turn)
+        internal Order(RobotController controller, int turn)
         {
             commands = new SortedList<Command, ICommand>();
             this.controller = controller;
@@ -38,7 +38,7 @@ namespace BotArena
                 return turn;
         }
 
-        public List<ICommand> GetCommands()
+        internal List<ICommand> GetCommands()
         {
             lock (this)
                 return commands.Values.ToList();

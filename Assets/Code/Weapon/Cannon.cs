@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace BotArena
 {
-    public class Cannon : IWeaponController
+    internal class Cannon : IWeaponController
     {
 
         public override void Attack(float power)

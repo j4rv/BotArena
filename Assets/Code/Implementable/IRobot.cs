@@ -6,13 +6,15 @@ namespace BotArena
 {
     public abstract class IRobot
     {
-        public string name;
         public RobotInfo info;
-        public HashSet<RobotInfo> enemies;
+
+        protected string name;
+        protected Order order;
+        protected HashSet<RobotInfo> enemies;
 
         private RobotThread robotThread;
 
-        public IRobot(RobotController parent)
+        internal IRobot()
         {
             info = new RobotInfo();
             robotThread = new RobotThread();
@@ -21,7 +23,7 @@ namespace BotArena
 
         //              THREAD METHODS
 
-        public bool StartTurn(RobotThreadSharedData robotData)
+        internal bool StartTurn(RobotThreadSharedData robotData)
         {
             return robotThread.newTurn(() => Run(robotData));
         }
@@ -29,19 +31,19 @@ namespace BotArena
         //This runs on robotThread.
         private void Run(RobotThreadSharedData robotData)
         {
-            Order order = robotData.GetLastOrder();
-            Think(order);
+            order = robotData.GetLastOrder();
+            Think();
 
             foreach(Event e in robotData.events)
             {
-                EventHandler.HandleEvent(e, order, this);
+                EventHandler.HandleEvent(e, this);
             }
         }
         
 
         //              ROBOT METHODS
              
-        public void UpdateInfo(float hp, float en, float ag, Vector3 pos, Vector3 rot, Vector3 gunRot)
+        internal void UpdateInfo(float hp, float en, float ag, Vector3 pos, Vector3 rot, Vector3 gunRot)
         {
             info.health = hp;
             info.energy = en;
@@ -50,11 +52,16 @@ namespace BotArena
             info.rotation = rot;
             info.gunRotation = gunRot;
         }
+
+        public string GetName()
+        {
+            return name;
+        }
         
         //              ABSTRACT METHODS
 
-        public virtual void Think(Order order) { }
-        public virtual void OnRobotDetected(Order order, RobotInfo robotInfo) { }
+        public virtual void Think() { }
+        public virtual void OnRobotDetected(RobotInfo robotInfo) { }
         public virtual void OnWallHit(Collision wallCollision) { }
         public virtual void OnDeath(IRobot deadRobot) { }
     }
