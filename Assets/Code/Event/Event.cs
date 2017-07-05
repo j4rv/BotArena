@@ -1,6 +1,6 @@
 ﻿namespace BotArena
 {
-    public class Event
+    public interface Event
     {
         
     }

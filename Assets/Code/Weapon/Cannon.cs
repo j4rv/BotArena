@@ -11,7 +11,7 @@ namespace BotArena
             GameObject res;
 
             res = Instantiate(projectileObject, bulletSpawner.position, bulletSpawner.rotation);
-            res.GetComponent<Rigidbody>().velocity = transform.forward * power * 5;
+            res.GetComponent<Rigidbody>().velocity = transform.forward * power * 8;
             res.GetComponent<IProjectileController>().SetWeapon(this);
         }
 

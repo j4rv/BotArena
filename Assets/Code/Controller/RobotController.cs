@@ -15,9 +15,7 @@ namespace BotArena
         public BodyController body;
         [SerializeField]
         private Transform radar;
-
-        [SerializeField]
-        private string dllPath;
+        
         [SerializeField]
         private float maxHp;
         [SerializeField]
@@ -39,9 +37,6 @@ namespace BotArena
             health = maxHp;
             energy = maxEnergy;
             agility = 10;
-
-            robot = DllUtil.LoadRobotFromDll(dllPath);
-            transform.name = robot.GetName();
 
             robotThreadSharedData = new RobotThreadSharedData();
         }
@@ -67,7 +62,7 @@ namespace BotArena
 
 
         //              ROBOT METHODS
-
+        
         public float GetEnergy()
         {
             return energy;

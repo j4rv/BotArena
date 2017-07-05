@@ -15,7 +15,7 @@ namespace BotArena
             IList<Type> robots = GetTypes<IRobot>(dllPath);
             
             //Only gets the first robot from the dll, for now
-            res = (IRobot) Activator.CreateInstance(robots[0], new object[] {null});
+            res = (IRobot) Activator.CreateInstance(robots[0], new object[] {});
 
             return res;
         }
