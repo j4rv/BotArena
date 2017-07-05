@@ -19,7 +19,7 @@ namespace BotArena
 
         public bool CanExecute()
         {
-            return (robotController.GetEnergy() >= GetStaminaCost())
+            return (robotController.GetEnergy() >= GetEnergyCost())
                 && (IsOnCooldown() == false);
         }
 
@@ -39,7 +39,7 @@ namespace BotArena
         protected virtual int GetCooldown() { return 0; }
 
         protected abstract void Execute();        
-        public abstract float GetStaminaCost();
+        public abstract float GetEnergyCost();
         public abstract Command GetCommand();
 
     }

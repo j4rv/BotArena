@@ -7,7 +7,7 @@ namespace BotArena
     {
         protected override float GetDamage()
         {
-            return 10f;
+            return 5f;
         }
     }
 }

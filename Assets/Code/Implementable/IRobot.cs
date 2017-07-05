@@ -30,8 +30,8 @@ namespace BotArena
         private void Run(RobotThreadSharedData robotData)
         {
             Order order = robotData.GetLastOrder();
-
             Think(order);
+
             foreach(Event e in robotData.events)
             {
                 EventHandler.HandleEvent(e, order, this);
@@ -56,5 +56,6 @@ namespace BotArena
         public virtual void Think(Order order) { }
         public virtual void OnRobotDetected(Order order, RobotInfo robotInfo) { }
         public virtual void OnWallHit(Collision wallCollision) { }
+        public virtual void OnDeath(IRobot deadRobot) { }
     }
 }

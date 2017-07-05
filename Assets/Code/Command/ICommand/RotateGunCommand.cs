@@ -24,10 +24,10 @@ namespace BotArena
         {            
              //Rotate along the Y axis
              robotController.weapon.transform.RotateAround(robotController.transform.position, robotController.transform.up, speed);
-             robotController.ConsumeEnergy(GetStaminaCost());
+             robotController.ConsumeEnergy(GetEnergyCost());
         }
 
-        public override float GetStaminaCost()
+        public override float GetEnergyCost()
         {
             return Mathf.Abs(speed) / robotController.GetAgility();
         }

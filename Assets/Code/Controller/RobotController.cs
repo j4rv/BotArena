@@ -9,7 +9,7 @@ namespace BotArena
         public IRobot robot;
         public IWeaponController weapon;
         public BodyController body;
-        private RobotThreadSharedData threadData;
+        private RobotThreadSharedData robotThreadSharedData;
 
         [SerializeField]
         private string dllPath;
@@ -35,7 +35,7 @@ namespace BotArena
             energy = maxEnergy;
             agility = 10;
 
-            threadData = new RobotThreadSharedData();
+            robotThreadSharedData = new RobotThreadSharedData();
             robot = DllUtil.LoadRobotFromDll(dllPath, this);
             transform.name = robot.name;
         }
@@ -62,14 +62,6 @@ namespace BotArena
 
         //              ROBOT METHODS
 
-        private void UpdateRobot()
-        {
-            Vector3 pos = transform.position;
-            Vector3 rot = transform.rotation.eulerAngles;
-            Vector3 gunRot = weapon.transform.rotation.eulerAngles;
-            robot.UpdateInfo(health, energy, agility, pos, rot, gunRot);
-        }
-
         public float GetEnergy()
         {
             return energy;
@@ -92,11 +84,11 @@ namespace BotArena
                 health -= damage;
         }
 
-        private Dictionary<Command, int> commandsTurnDictionary = new Dictionary<Command, int>();
+        private Dictionary<Command, int> commandToTurnDictionary = new Dictionary<Command, int>();
         public int GetLastTurnExecuted(Command cmd)
         {
             int result;
-            commandsTurnDictionary.TryGetValue(cmd, out result);
+            commandToTurnDictionary.TryGetValue(cmd, out result);
             return result;
         }
 
@@ -115,52 +107,67 @@ namespace BotArena
 
         //              TURN METHODS
 
-        private void TurnUpdate()
+        internal void TurnUpdate()
         {
-            energy = Mathf.Clamp(energy + 1, 0, maxEnergy);    //Recover some energy
-
-            UpdateRobot();
+            TurnUpdateProperties();
+            UpdateRobotInfo();
             ExecuteLastOrder();
 
-            int turn = TurnManager.GetCurrentTurn();
-            Order order = new Order(this, turn);
-            threadData.orders.Add(order);
-            threadData.events.Clear();
-            collisions.Clear();
+            CreateOrderForNextTurn();
+            NewTurnEventChecks();
+            RunNewTurnOnRobotThreat();
+        }
 
-            TurnCheck();
+        private void TurnUpdateProperties()
+        {
+            energy = Mathf.Clamp(energy + 1, 0, maxEnergy);    //Recover some energy
+            //TODO: Heal a bit over time? Stop healing for x turns after receiving damage?
+        }
 
-            NewTurn();
+        private void UpdateRobotInfo()
+        {
+            Vector3 pos = transform.position;
+            Vector3 rot = transform.rotation.eulerAngles;
+            Vector3 gunRot = weapon.transform.rotation.eulerAngles;
+            robot.UpdateInfo(health, energy, agility, pos, rot, gunRot);
         }
 
         private void ExecuteLastOrder()
         {
             int currentTurn = TurnManager.GetCurrentTurn();
             int lastTurn = currentTurn - 1;
-            Order lastOrder = threadData.GetLastOrder();
+            Order lastOrder = robotThreadSharedData.GetLastOrder();
 
             if (lastOrder != null
-                && lastOrder.GetTurn() == lastTurn
+                && lastOrder.GetTurn() == lastTurn      //If the robot missed the last turn, this would return false
                 && lastOrder.IsExecuted() == false)
             {
-                lastOrder.AddCommand(Command.ATTACK, 2); //For debug
+                lastOrder.AddCommand(Command.ATTACK, Random.Range(0.5f, 5)); //For debug
                 List<ICommand> commands = lastOrder.GetCommands();
 
                 foreach (ICommand cmd in commands)
                 {
-                    //If the command was executed, we'll update the dictionary
+                    //If the command was executed, we'll update the command-turn dictionary
                     if (cmd.Call()) { 
-                        commandsTurnDictionary.Remove(cmd.GetCommand());
-                        commandsTurnDictionary.Add(cmd.GetCommand(), currentTurn);
+                        commandToTurnDictionary.Remove(cmd.GetCommand());
+                        commandToTurnDictionary.Add(cmd.GetCommand(), currentTurn);
                     }
                 }
                 lastOrder.Executed();
             }
         }
 
-        private void NewTurn()
+        private void CreateOrderForNextTurn()
         {
-            bool turnLost = !robot.StartTurn(threadData);
+            int turn = TurnManager.GetCurrentTurn();
+            Order order = new Order(this, turn);
+            robotThreadSharedData.orders.Add(order);
+        }
+
+        private void RunNewTurnOnRobotThreat()
+        {
+            //We try to start a new turn. If we can't, we'll apply a damage penalty
+            bool turnLost = !robot.StartTurn(robotThreadSharedData);
 
             if (turnLost)
                 TakeDamage(10);
@@ -169,8 +176,12 @@ namespace BotArena
 
         //              EVENT CHECKERS
 
-        private void TurnCheck()
+        private void NewTurnEventChecks()
         {
+            //Clear the previous turn's events and collisions
+            robotThreadSharedData.events.Clear();
+            collisions.Clear();
+
             CheckRobotAhead();
             CheckWallHit();
             CheckDeath();
@@ -180,14 +191,14 @@ namespace BotArena
         {
             RaycastHit hit;
 
-            if (Physics.Raycast(transform.position, weapon.transform.forward, out hit))
+            if (Physics.Raycast(transform.position, body.transform.forward, out hit))
             {
                 if (hit.transform.tag == Tags.ROBOT)
                 {
                     RobotController hitRobotController = hit.transform.GetComponent<RobotController>();
                     RobotInfo enemyInfo = hitRobotController.robot.info;
                     RobotDetectedEvent e = new RobotDetectedEvent(enemyInfo);
-                    threadData.events.Add(e);
+                    robotThreadSharedData.events.Add(e);
                 }
             }
         }
@@ -198,7 +209,7 @@ namespace BotArena
             if (wallHit != null)
             {
                 WallHitEvent e = new WallHitEvent(wallHit);
-                threadData.events.Add(e);
+                robotThreadSharedData.events.Add(e);
             }
 
             wallHit = null;
@@ -208,9 +219,9 @@ namespace BotArena
         {
             if (health <= 0)
             {
-                DeathEvent death = new DeathEvent(this);
-                threadData.events.Add(death);
-                //Add some kind of visuals
+                DeathEvent death = new DeathEvent(robot);
+                robotThreadSharedData.events.Add(death);
+                //TODO: Add some kind of visuals
                 Destroy(gameObject);
             }
         }

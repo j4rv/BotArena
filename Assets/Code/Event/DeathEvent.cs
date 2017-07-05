@@ -1,19 +1,16 @@
-﻿using System;
-using UnityEngine;
-
-namespace BotArena
+﻿namespace BotArena
 {
     public class DeathEvent : Event
     {
-        private RobotController deadRobot;
+        private IRobot deadRobot;
 
-        public RobotController DeadRobot
+        public IRobot DeadRobot
         {
             get { return deadRobot; }
             private set { deadRobot = value; }
         }
         
-        public DeathEvent(RobotController deadRobot)
+        public DeathEvent(IRobot deadRobot)
         {
             this.deadRobot = deadRobot;
         }

@@ -24,10 +24,10 @@ namespace BotArena
         {
             //Go forward
             robotController.GetComponent<Rigidbody>().velocity = robotController.transform.forward * speed;
-            robotController.ConsumeEnergy(GetStaminaCost());
+            robotController.ConsumeEnergy(GetEnergyCost());
         }
 
-        public override float GetStaminaCost()
+        public override float GetEnergyCost()
         {
             return Mathf.Abs(speed) / robotController.GetAgility();
         }

@@ -28,10 +28,10 @@ namespace BotArena
         protected override void Execute()
         {
             robotController.weapon.Attack(power);
-            robotController.ConsumeEnergy(GetStaminaCost());    
+            robotController.ConsumeEnergy(GetEnergyCost());    
         }
 
-        public override float GetStaminaCost()
+        public override float GetEnergyCost()
         {
             return power * robotController.weapon.GetStaminaCost();
         }
