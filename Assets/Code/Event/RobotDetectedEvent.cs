@@ -1,11 +1,10 @@
 ﻿namespace BotArena
 {
-    public class RobotDetectedEvent : Event
+    public class RobotDetectedEvent : IEvent
     {
         public RobotInfo robotInfo;
 
-        public RobotDetectedEvent(RobotInfo robotInfo)
-        {
+        public RobotDetectedEvent(RobotInfo robotInfo) {
             this.robotInfo = robotInfo;
         }
     }

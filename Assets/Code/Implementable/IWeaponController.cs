@@ -13,6 +13,5 @@ namespace BotArena
 
         public abstract void Attack(float power);
         public abstract float GetStaminaCost();
-
     }
 }

@@ -6,8 +6,7 @@ namespace BotArena
     internal class Cannon : IWeaponController
     {
 
-        public override void Attack(float power)
-        {
+        public override void Attack(float power) {
             GameObject res;
 
             res = Instantiate(projectileObject, bulletSpawner.position, bulletSpawner.rotation);
@@ -15,8 +14,7 @@ namespace BotArena
             res.GetComponent<IProjectileController>().SetWeapon(this);
         }
 
-        public override float GetStaminaCost()
-        {
+        public override float GetStaminaCost() {
             return 1;
         }
     }

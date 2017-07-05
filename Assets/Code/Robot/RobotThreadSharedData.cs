@@ -6,18 +6,16 @@ namespace BotArena
     public class RobotThreadSharedData
     {
         public List<Order> orders;
-        public List<Event> events;
+        public List<IEvent> events;
 
-        public RobotThreadSharedData()
-        {
+        public RobotThreadSharedData() {
             orders = new List<Order>();
-            events = new List<Event>();
+            events = new List<IEvent>();
         }
 
-        public Order GetLastOrder()
-        { 
+        public Order GetLastOrder() {
             //LastOrDefault because Last would throw an exception on the first turn.
-            return orders.LastOrDefault(); 
+            return orders.LastOrDefault();
         }
     }
 }

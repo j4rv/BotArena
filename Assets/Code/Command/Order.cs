@@ -13,52 +13,45 @@ namespace BotArena
         private int turn;
 
 
-        internal Order(RobotController controller, int turn)
-        {
+        internal Order(RobotController controller, int turn) {
             commands = new SortedList<Command, ICommand>();
             this.controller = controller;
             this.turn = turn;
         }
 
-        public bool IsExecuted()
-        {
+        public bool IsExecuted() {
             lock (this)
                 return executed;
         }
 
-        public void Executed()
-        {
+        public void Executed() {
             lock (this)
                 executed = true;
         }
 
-        public int GetTurn()
-        {
+        public int GetTurn() {
             lock (this)
                 return turn;
         }
 
-        internal List<ICommand> GetCommands()
-        {
+        internal List<ICommand> GetCommands() {
             lock (this)
                 return commands.Values.ToList();
         }
 
         /// Returns true if a command was overriden
-        public bool AddCommand(Command cmd, params object[] args)
-        {
-            lock (this) { 
+        public bool AddCommand(Command cmd, params object[] args) {
+            lock (this) {
                 bool res = commands.Remove(cmd);
                 ICommand command = CommandFactory.Create(cmd, controller, args);
                 commands.Add(cmd, command);
-            
+
 
                 return res;
             }
         }
 
-        public void Reset()
-        {
+        public void Reset() {
             lock (this)
                 commands.Clear();
         }

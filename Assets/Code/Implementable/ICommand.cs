@@ -7,28 +7,23 @@ namespace BotArena
         protected internal RobotController robotController;
         protected bool deletable = false;
 
-        public bool Call()
-        {
-            if (CanExecute())
-            {
+        public bool Call() {
+            if (CanExecute()) {
                 Execute();
                 return true;
             }
             return false;
         }
 
-        public bool CanExecute()
-        {
+        public bool CanExecute() {
             return (robotController.GetEnergy() >= GetEnergyCost())
                 && (IsOnCooldown() == false);
         }
 
-        protected bool IsOnCooldown()
-        {
+        protected bool IsOnCooldown() {
             int lastTurn = robotController.GetLastTurnExecuted(GetCommand());
 
-            if(lastTurn == 0 || GetCooldown() == 0)
-            {
+            if (lastTurn == 0 || GetCooldown() == 0) {
                 return false;
             }
 
@@ -38,7 +33,7 @@ namespace BotArena
 
         protected virtual int GetCooldown() { return 0; }
 
-        protected abstract void Execute();        
+        protected abstract void Execute();
         public abstract float GetEnergyCost();
         public abstract Command GetCommand();
 

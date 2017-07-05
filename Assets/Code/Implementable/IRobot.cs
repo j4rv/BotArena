@@ -34,7 +34,7 @@ namespace BotArena
             order = robotData.GetLastOrder();
             Think();
 
-            foreach(Event e in robotData.events)
+            foreach(IEvent e in robotData.events)
             {
                 EventHandler.HandleEvent(e, this);
             }

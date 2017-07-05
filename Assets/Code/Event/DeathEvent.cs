@@ -1,17 +1,15 @@
 ﻿namespace BotArena
 {
-    public class DeathEvent : Event
+    public class DeathEvent : IEvent
     {
         private IRobot deadRobot;
 
-        public IRobot DeadRobot
-        {
+        public IRobot DeadRobot {
             get { return deadRobot; }
             private set { deadRobot = value; }
         }
-        
-        public DeathEvent(IRobot deadRobot)
-        {
+
+        public DeathEvent(IRobot deadRobot) {
             this.deadRobot = deadRobot;
         }
     }

@@ -12,29 +12,24 @@ namespace BotArena
 
         private static TurnManager instance;
 
-        private static TurnManager Get()
-        {
+        private static TurnManager Get() {
             if (instance == null)
                 instance = (TurnManager) FindObjectOfType(typeof(TurnManager));
             return instance;
         }
 
-        void FixedUpdate()
-        {
-            if (IsTurnUpdate())
-            {
+        void FixedUpdate() {
+            if (IsTurnUpdate()) {
                 currentTurn++;
             }
             timeSteps++;
         }
 
-        public static int GetCurrentTurn()
-        {
+        public static int GetCurrentTurn() {
             return Get().currentTurn;
         }
 
-        public static bool IsTurnUpdate()
-        {
+        public static bool IsTurnUpdate() {
             //A turn every two timesteps
             return Get().timeSteps % 2 == 0;
         }

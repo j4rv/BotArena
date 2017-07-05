@@ -2,12 +2,11 @@
 
 namespace BotArena
 {
-    public class WallHitEvent : Event
+    public class WallHitEvent : IEvent
     {
         public Collision wallCollision;
 
-        public WallHitEvent(Collision wallCollision)
-        {
+        public WallHitEvent(Collision wallCollision) {
             this.wallCollision = wallCollision;
         }
     }

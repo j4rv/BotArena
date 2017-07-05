@@ -5,8 +5,7 @@ namespace BotArena
 {
     class CannonBall : IProjectileController
     {
-        protected override float GetDamage()
-        {
+        protected override float GetDamage() {
             return 5f;
         }
     }
