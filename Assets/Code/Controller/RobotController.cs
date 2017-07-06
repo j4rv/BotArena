@@ -31,11 +31,8 @@ namespace BotArena
         //              UNITY METHODS
 
         void Start() {
-            maxHp = 100;
-            maxEnergy = 100;
             health = maxHp;
             energy = maxEnergy;
-            agility = 10;
 
             robotThreadSharedData = new RobotThreadSharedData();
         }
@@ -57,6 +54,10 @@ namespace BotArena
 
 
         //              ROBOT METHODS
+
+        public bool IsAlive() {
+            return health > 0;
+        }
 
         public float GetEnergy() {
             return energy;
@@ -97,13 +98,17 @@ namespace BotArena
         //              TURN METHODS
 
         internal void TurnUpdate() {
-            TurnUpdateProperties();
-            UpdateRobotInfo();
-            ExecuteLastOrder();
+            if (IsAlive()) {
+                TurnUpdateProperties();
+                UpdateRobotInfo();
+                ExecuteLastOrder();
 
-            CreateOrderForNextTurn();
-            NewTurnEventChecks();
-            RunNewTurnOnRobotThreat();
+                CreateOrderForNextTurn();
+                NewTurnEventChecks();
+                RunNewTurnOnRobotThreat();
+            } else {
+                CheckDeath();
+            }
         }
 
         private void TurnUpdateProperties() {
@@ -163,7 +168,6 @@ namespace BotArena
 
             CheckRobotAhead();
             CheckWallHit();
-            CheckDeath();
         }
 
         private void CheckRobotAhead() {
@@ -190,12 +194,12 @@ namespace BotArena
         }
 
         private void CheckDeath() {
-            if (health <= 0) {
-                DeathEvent death = new DeathEvent(robot);
-                robotThreadSharedData.events.Add(death);
-                //TODO: Add some kind of visuals
-                Destroy(gameObject);
-            }
+            DeathEvent death = new DeathEvent(robot);
+            robotThreadSharedData.events.Add(death);
+            UpdateRobotInfo();
+            //TODO: Add some kind of visuals
+            Destroy(gameObject);
+            Destroy(this);
         }
 
     }

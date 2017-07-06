@@ -4,7 +4,7 @@ namespace BotArena
 {
     internal class RandomUtil
     {
-        private static readonly float MAP_DIMENSIONS = 18f;
+        private static readonly float MAP_DIMENSIONS = 13f;
 
         public static Vector3 RandomPositionInsideMap() {
             return new Vector3(Random.Range(-MAP_DIMENSIONS, MAP_DIMENSIONS), 0.01f, Random.Range(-MAP_DIMENSIONS, MAP_DIMENSIONS));

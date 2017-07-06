@@ -18,6 +18,10 @@ namespace BotArena
 
         //Abstract methods implemented
 
+        public override bool CanExecute() {
+            return base.CanExecute() && robotController.body.CanMove();
+        }
+
         protected override void Execute() {
             //Go forward
             robotController.GetComponent<Rigidbody>().velocity = robotController.transform.forward * speed;

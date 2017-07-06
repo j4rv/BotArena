@@ -15,7 +15,7 @@ namespace BotArena
         }
 
         public override float GetStaminaCost() {
-            return 1;
+            return 20;
         }
     }
 }

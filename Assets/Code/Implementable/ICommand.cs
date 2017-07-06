@@ -15,7 +15,7 @@ namespace BotArena
             return false;
         }
 
-        public bool CanExecute() {
+        public virtual bool CanExecute() {
             return (robotController.GetEnergy() >= GetEnergyCost())
                 && (IsOnCooldown() == false);
         }

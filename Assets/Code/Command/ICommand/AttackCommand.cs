@@ -18,7 +18,7 @@ namespace BotArena
         }
 
         protected override int GetCooldown() {
-            return 5;
+            return 10;
         }
 
         //Abstract methods implemented
