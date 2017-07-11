@@ -14,8 +14,9 @@ namespace BotArena
         protected abstract float GetDamage();
 
         public virtual void RobotHit(RobotController hit) {
-            float velocity = GetComponent<Rigidbody>().velocity.magnitude;
-            hit.TakeDamage(velocity * GetDamage());
+            float velocity = this.GetComponent<Rigidbody>().velocity.magnitude;
+            float damage = velocity * GetDamage();
+            hit.TakeDamage(damage);
         }
 
         void OnCollisionEnter(Collision collision) {

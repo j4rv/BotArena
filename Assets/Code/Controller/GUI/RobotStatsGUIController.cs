@@ -13,14 +13,25 @@ namespace BotArena
         Image energySprite;
         RobotController robotController;
 
+        private static readonly int MAX = 50;
+
         void Start() {
             robotController = GetComponentInParent<RobotController>();
         }
 
         void FixedUpdate() {
             RectTransform hpRectTransform = healthSprite.rectTransform;
-            //hpRectTransform.offsetMax = new Vector2( robotController.health * 0.95f / robotController.robot.maxHealth, 0);
-            hpRectTransform.offsetMax = new Vector2(0.5f, 0);
+            RectTransform enRectTransform = energySprite.rectTransform;
+            hpRectTransform.offsetMax = new Vector2(1, GetRobotHealthValue());
+            enRectTransform.offsetMax = new Vector2(1, GetRobotEnergyValue());
+        }
+
+        float GetRobotHealthValue() {
+            return -MAX + (robotController.health * MAX / robotController.robot.maxHealth);
+        }
+
+        float GetRobotEnergyValue() {
+            return -MAX + (robotController.energy * MAX / robotController.robot.maxEnergy);
         }
     }
 }

@@ -35,18 +35,18 @@ namespace BotArena
         void Start() {
             NewRound();
             matchInProgress = true;
-            Debug.Log(robotsMatchData.ToArray()[0].VictoriesCount() + " : " + robotsMatchData.ToArray()[1].VictoriesCount());
+            Debug.Log(instance.robotsMatchData.ToArray()[0].VictoriesCount() + " : " + instance.robotsMatchData.ToArray()[1].VictoriesCount());
         }
 
         void FixedUpdate() {
-            if (robotsMatchData.Count > 0
+            if (Instance().robotsMatchData.Count > 0
                     && TurnManager.IsTurnUpdate()
                     && matchInProgress == true) {
 
                 List<PlayerMatchData> aliveBots = new List<PlayerMatchData>();
                 List<PlayerMatchData> deadBots = new List<PlayerMatchData>();
 
-                foreach (PlayerMatchData robotMatchData in robotsMatchData){
+                foreach (PlayerMatchData robotMatchData in instance.robotsMatchData){
                     RobotController robotController = robotMatchData.controller;
 
                     if (robotController) { 
