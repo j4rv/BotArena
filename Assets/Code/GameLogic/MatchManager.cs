@@ -73,8 +73,8 @@ namespace BotArena
                 robotsMatchData = new List<RobotMatchData>();
 
                 // hardcoded for now
-                string robotLibrary1 = @"F:\TFG\\Libraries\RandomAI.dll";
-                string robotLibrary2 = @"F:\TFG\\Libraries\RandomAI.dll";
+                string robotLibrary1 = @".\Libraries\RandomAI.dll";
+                string robotLibrary2 = @".\Libraries\RandomAI.dll";
                 IRobot robot1 = DllUtil.LoadRobotFromDll(robotLibrary1);
                 IRobot robot2 = DllUtil.LoadRobotFromDll(robotLibrary2);
                 robotsMatchData.Add(new RobotMatchData(robot1, null));
