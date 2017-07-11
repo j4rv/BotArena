@@ -18,7 +18,7 @@ namespace BotArena
         }
 
         protected override int GetCooldown() {
-            return 10;
+            return robotController.weapon.GetCooldown();
         }
 
         //Abstract methods implemented

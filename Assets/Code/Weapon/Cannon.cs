@@ -14,6 +14,10 @@ namespace BotArena
             res.GetComponent<IProjectileController>().SetWeapon(this);
         }
 
+        public override int GetCooldown() {
+            return 20;
+        }
+
         public override float GetStaminaCost() {
             return 20;
         }
