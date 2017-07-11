@@ -14,6 +14,12 @@ namespace BotArena
 
         private RobotThread robotThread;
 
+        //default values, can be overriden depending on the robot
+        internal float maxHealth = 100;
+        internal float maxEnergy = 100;
+        internal float agility = 10;
+        internal float energyRecoveryRate = 1;
+
         internal IRobot()
         {
             info = new RobotInfo();

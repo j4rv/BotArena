@@ -10,7 +10,7 @@ namespace BotArena
             if (robot is ITank) {
                 res = Resources.Load<RobotController>("Prefabs/Robots/Tank");
                 res = Object.Instantiate(res, position, rotation);
-                res.robot = robot;
+                res.Init(robot);
             }
 
             return res;

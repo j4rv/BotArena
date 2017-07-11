@@ -16,32 +16,26 @@ namespace BotArena
         [SerializeField]
         private Transform radar;
 
-        [SerializeField]
-        private float maxHp;
-        [SerializeField]
-        private float health;
-        [SerializeField]
-        private float maxEnergy;
-        [SerializeField]
-        private float energy;
-        [SerializeField]
-        private float agility;
+        public float health;
+        public float energy;
+        public float agility;
 
-
-        //              UNITY METHODS
-
-        void Start() {
-            health = maxHp;
-            energy = maxEnergy;
+        public void Init(IRobot robot) {
+            this.robot = robot;
+            health = robot.maxHealth;
+            energy = robot.maxEnergy;
+            agility = robot.agility;
 
             robotThreadSharedData = new RobotThreadSharedData();
         }
 
-        void FixedUpdate() {
-            if (TurnManager.IsTurnUpdate()) {
+        //              UNITY METHODS
+
+        /*void FixedUpdate() {
+            if (MatchManager.Instance().matchInProgress && TurnManager.IsTurnUpdate()) {
                 TurnUpdate();
             }
-        }
+        }*/
 
         private LinkedList<Collision> collisions = new LinkedList<Collision>();
         void OnCollisionEnter(Collision collision) {
@@ -112,7 +106,7 @@ namespace BotArena
         }
 
         private void TurnUpdateProperties() {
-            energy = Mathf.Clamp(energy + 1, 0, maxEnergy);    //Recover some energy
+            energy = Mathf.Clamp(energy + robot.energyRecoveryRate, 0, robot.maxEnergy);    //Recover some energy
             //TODO: Heal a bit over time? Stop healing for x turns after receiving damage?
         }
 
