@@ -5,6 +5,6 @@ using UnityEngine;
 [System.Serializable]
 public class GameData {
 
-    public List<string> dllPaths;
+    public List<string> libraryPaths;
 	
 }
