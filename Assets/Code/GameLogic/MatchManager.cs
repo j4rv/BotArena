@@ -21,10 +21,10 @@ namespace BotArena
                 instance.robotsMatchData = new List<PlayerMatchData>();
 
                 // hardcoded for now
-                string robotLibrary1 = @".\Libraries\RandomAI.dll";
-                string robotLibrary2 = @".\Libraries\RandomAI.dll";
-                IRobot robot1 = DllUtil.LoadRobotFromDll(robotLibrary1);
-                IRobot robot2 = DllUtil.LoadRobotFromDll(robotLibrary2);
+                string robotLibrary1 = @".\Libraries\Defaultbots.dll";
+                string robotLibrary2 = @".\Libraries\Defaultbots.dll";
+                IRobot robot1 = DllUtil.CreateRandomRobotFromDll(robotLibrary1);
+                IRobot robot2 = DllUtil.CreateRandomRobotFromDll(robotLibrary2);
                 instance.robotsMatchData.Add(new PlayerMatchData(robot1.GetName(), robot1, null));
                 instance.robotsMatchData.Add(new PlayerMatchData(robot2.GetName(), robot2, null));
                 instance.round = 0;
@@ -35,7 +35,7 @@ namespace BotArena
         void Start() {
             NewRound();
             matchInProgress = true;
-            Debug.Log(instance.robotsMatchData.ToArray()[0].VictoriesCount() + " : " + instance.robotsMatchData.ToArray()[1].VictoriesCount());
+            //Debug.Log(instance.robotsMatchData.ToArray()[0].VictoriesCount() + " : " + instance.robotsMatchData.ToArray()[1].VictoriesCount());
         }
 
         void FixedUpdate() {

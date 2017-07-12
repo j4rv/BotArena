@@ -18,13 +18,11 @@ namespace BotArena
 
         public float health;
         public float energy;
-        public float agility;
 
         public void Init(IRobot robot) {
             this.robot = robot;
             health = robot.maxHealth;
             energy = robot.maxEnergy;
-            agility = robot.agility;
 
             robotThreadSharedData = new RobotThreadSharedData();
         }
@@ -46,7 +44,6 @@ namespace BotArena
             }
         }
 
-
         //              ROBOT METHODS
 
         public bool IsAlive() {
@@ -63,7 +60,7 @@ namespace BotArena
         }
 
         public float GetAgility() {
-            return agility;
+            return robot.agility;
         }
 
         internal void TakeDamage(float damage) {
@@ -71,10 +68,10 @@ namespace BotArena
                 health -= damage;
         }
 
-        private Dictionary<Command, int> commandToTurnDictionary = new Dictionary<Command, int>();
+        private Dictionary<Command, int> commandToTurn = new Dictionary<Command, int>();
         public int GetLastTurnExecuted(Command cmd) {
             int result;
-            commandToTurnDictionary.TryGetValue(cmd, out result);
+            commandToTurn.TryGetValue(cmd, out result);
             return result;
         }
 
@@ -93,19 +90,19 @@ namespace BotArena
 
         internal void TurnUpdate() {
             if (IsAlive()) {
-                TurnUpdateProperties();
+                TurnUpdateStats();
                 UpdateRobotInfo();
                 ExecuteLastOrder();
 
                 CreateOrderForNextTurn();
                 NewTurnEventChecks();
-                RunNewTurnOnRobotThreat();
+                RunNewTurnOnRobotThread();
             } else {
                 CheckDeath();
             }
         }
 
-        private void TurnUpdateProperties() {
+        private void TurnUpdateStats() {
             energy = Mathf.Clamp(energy + robot.energyRecoveryRate, 0, robot.maxEnergy);    //Recover some energy
             //TODO: Heal a bit over time? Stop healing for x turns after receiving damage?
         }
@@ -114,7 +111,7 @@ namespace BotArena
             Vector3 pos = transform.position;
             Vector3 rot = transform.rotation.eulerAngles;
             Vector3 gunRot = weapon.transform.rotation.eulerAngles;
-            robot.UpdateInfo(health, energy, agility, pos, rot, gunRot);
+            robot.UpdateInfo(health, energy, GetAgility(), pos, rot, gunRot);
         }
 
         private void ExecuteLastOrder() {
@@ -130,8 +127,8 @@ namespace BotArena
                 foreach (ICommand cmd in commands) {
                     //If the command was executed, we'll update the command-turn dictionary
                     if (cmd.Call()) {
-                        commandToTurnDictionary.Remove(cmd.GetCommand());
-                        commandToTurnDictionary.Add(cmd.GetCommand(), currentTurn);
+                        commandToTurn.Remove(cmd.GetCommand());
+                        commandToTurn.Add(cmd.GetCommand(), currentTurn);
                     }
                 }
                 lastOrder.Executed();
@@ -144,7 +141,7 @@ namespace BotArena
             robotThreadSharedData.orders.Add(order);
         }
 
-        private void RunNewTurnOnRobotThreat() {
+        private void RunNewTurnOnRobotThread() {
             //We try to start a new turn. If we can't, we'll apply a damage penalty
             bool turnLost = !robot.StartTurn(robotThreadSharedData);
 

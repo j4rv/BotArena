@@ -45,8 +45,7 @@ namespace BotArena
                 bool res = commands.Remove(cmd);
                 ICommand command = CommandFactory.Create(cmd, controller, args);
                 commands.Add(cmd, command);
-
-
+                
                 return res;
             }
         }

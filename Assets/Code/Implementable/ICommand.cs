@@ -5,7 +5,7 @@ namespace BotArena
     internal abstract class ICommand
     {
         protected internal RobotController robotController;
-        protected bool deletable = false;
+        protected bool cancellable = false;
 
         public bool Call() {
             if (CanExecute()) {
@@ -35,7 +35,7 @@ namespace BotArena
 
         protected abstract void Execute();
         public abstract float GetEnergyCost();
-        public abstract Command GetCommand();
+        public abstract Command GetCommand(); //Used for tracking the last time each command was used
 
     }
 }

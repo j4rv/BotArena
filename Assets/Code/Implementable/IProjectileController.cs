@@ -13,16 +13,15 @@ namespace BotArena
 
         protected abstract float GetDamage();
 
-        public virtual void RobotHit(RobotController hit) {
-            float velocity = this.GetComponent<Rigidbody>().velocity.magnitude;
-            float damage = velocity * GetDamage();
+        public virtual void RobotHit(RobotController hit, float impactVelocity) {
+            float damage = impactVelocity * GetDamage();
             hit.TakeDamage(damage);
         }
 
         void OnCollisionEnter(Collision collision) {
             if (collision.transform.tag == Tags.ROBOT) {
                 RobotController robot = collision.gameObject.GetComponent<RobotController>();
-                RobotHit(robot);
+                RobotHit(robot, collision.relativeVelocity.magnitude);
             }
             //TODO: Instantiate some kind of collision effect
             Destroy(gameObject);

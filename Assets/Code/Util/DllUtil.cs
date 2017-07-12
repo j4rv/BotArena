@@ -7,15 +7,23 @@ namespace BotArena
 {
     internal static class DllUtil
     {
-        public static IRobot LoadRobotFromDll(string dllPath) {
-            IRobot res = null;
+        static Random rng = new Random();
 
+        public static IRobot CreateFirstRobotFromDll(string dllPath) {
+            IList<Type> robots = FindRobotsInDll(dllPath);
+            
+            return (IRobot) Activator.CreateInstance(robots[0], new object[] { });
+        }
+
+        public static IRobot CreateRandomRobotFromDll(string dllPath) {
             IList<Type> robots = GetTypes<IRobot>(dllPath);
+            int randomIndex = (int) (rng.NextDouble() * robots.Count);
+            
+            return (IRobot) Activator.CreateInstance(robots[randomIndex], new object[] { });
+        }
 
-            //Only gets the first robot from the dll, for now
-            res = (IRobot) Activator.CreateInstance(robots[0], new object[] { });
-
-            return res;
+        private static IList<Type> FindRobotsInDll(string dllPath) {
+            return GetTypes<IRobot>(dllPath);
         }
 
 
