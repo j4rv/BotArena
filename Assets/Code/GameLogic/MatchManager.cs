@@ -6,9 +6,14 @@ namespace BotArena
 {
     internal class MatchManager : MonoBehaviour
     {
-        private static readonly string SCENE_TO_LOAD = "Match";
+        private static readonly string SCENE_TO_LOAD                =   "Match";
+        private static readonly int    TURN_LIMIT                   =   250;
+        private static readonly float  DAMAGE_PER_TURN_AFTER_LIMIT  =   0.5f;
+
         private static MatchManager instance = null;
 
+        HashSet<PlayerMatchData> aliveBots;
+        HashSet<PlayerMatchData> deadBots;
         public List<PlayerMatchData> robotsMatchData;
         public int round;
         public bool matchInProgress = false;
@@ -19,6 +24,8 @@ namespace BotArena
                 DontDestroyOnLoad(instance.gameObject);
 
                 instance.robotsMatchData = new List<PlayerMatchData>();
+                instance.aliveBots = new HashSet<PlayerMatchData>();
+                instance.deadBots = new HashSet<PlayerMatchData>();
 
                 // hardcoded for now
                 string robotLibrary1 = @".\Libraries\Defaultbots.dll";
@@ -32,7 +39,7 @@ namespace BotArena
             return instance;
         }
 
-        void Start() {
+        void Awake() {
             NewRound();
             matchInProgress = true;
             //Debug.Log(instance.robotsMatchData.ToArray()[0].VictoriesCount() + " : " + instance.robotsMatchData.ToArray()[1].VictoriesCount());
@@ -43,38 +50,44 @@ namespace BotArena
                     && TurnManager.IsTurnUpdate()
                     && matchInProgress == true) {
 
-                List<PlayerMatchData> aliveBots = new List<PlayerMatchData>();
-                List<PlayerMatchData> deadBots = new List<PlayerMatchData>();
-
-                foreach (PlayerMatchData robotMatchData in instance.robotsMatchData){
-                    RobotController robotController = robotMatchData.controller;
-
-                    if (robotController) { 
-                        robotController.TurnUpdate();
-
-                        if (robotController.IsAlive())
-                            aliveBots.Add(robotMatchData);
-                        else
-                            deadBots.Add(robotMatchData);
-                    }
+                instance.aliveBots.Clear();
+                foreach (PlayerMatchData playerMatchData in instance.robotsMatchData){
+                    RobotTurnOperations(playerMatchData);
                 }
 
-                CheckMatchEnd(aliveBots, deadBots);
+                CheckMatchEnd();
             }
         }        
 
-        void CheckMatchEnd(List<PlayerMatchData> aliveBots, List<PlayerMatchData> deadBots) {
-            if(aliveBots.Count == 1) {
+        static void RobotTurnOperations(PlayerMatchData playerMatchData) {
+            RobotController robotController = playerMatchData.controller;
+
+            if (robotController) {
+                if (TurnManager.GetCurrentTurn() > TURN_LIMIT) {
+                    robotController.TakeDamage(DAMAGE_PER_TURN_AFTER_LIMIT);
+                }
+
+                robotController.TurnUpdate();
+
+                if (robotController.IsAlive())
+                    instance.aliveBots.Add(playerMatchData);
+                else
+                    instance.deadBots.Add(playerMatchData);
+            }
+        }
+
+        static void CheckMatchEnd() {
+            if(instance.aliveBots.Count == 1) {
                 //One robot lives, that robot wins!
-                aliveBots.ForEach(x => x.AddMatch(MatchResult.VICTORY));
-                deadBots.ForEach(x => x.AddMatch(MatchResult.LOSS));
-                matchInProgress = false;
+                foreach (PlayerMatchData a in instance.aliveBots) { a.AddMatch(MatchResult.VICTORY); }
+                foreach (PlayerMatchData d in instance.deadBots) { d.AddMatch(MatchResult.LOSS); }
+                instance.matchInProgress = false;
                 SceneManager.LoadScene(SCENE_TO_LOAD); //TODO: Make it so that it loads after X seconds (coroutine?)
             }
-            if(aliveBots.Count == 0) {
+            if(instance.aliveBots.Count == 0) {
                 //It's a tie!
-                deadBots.ForEach(x => x.AddMatch(MatchResult.DRAW));
-                matchInProgress = false;
+                foreach (PlayerMatchData d in instance.deadBots) { d.AddMatch(MatchResult.DRAW); }
+                instance.matchInProgress = false;
                 SceneManager.LoadScene(SCENE_TO_LOAD);
             }
         }

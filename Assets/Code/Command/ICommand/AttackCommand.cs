@@ -14,7 +14,7 @@ namespace BotArena
 
         public void SetPower(float power) {
             this.power = Mathf.Clamp(power, 0.5f, 5f);
-            Debug.Log("Got" + power + " attack power; now it's " + this.power);
+            //Debug.Log("Got " + power + " attack power; now it's " + this.power);
         }
 
         protected override int GetCooldown() {
