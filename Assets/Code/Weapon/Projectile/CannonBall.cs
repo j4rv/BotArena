@@ -6,7 +6,7 @@ namespace BotArena
     class CannonBall : IProjectileController
     {
         protected override float GetDamage() {
-            return 2f;
+			return 6f;
         }
     }
 }
