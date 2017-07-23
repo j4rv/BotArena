@@ -4,6 +4,9 @@ namespace BotArena
 {
     internal abstract class IProjectileController : MonoBehaviour
     {
+        private static readonly float MINIMUM_DAMAGE = 1;
+        private static readonly float MAXIMUM_DAMAGE = 80; //Let's limit one hit kills
+
         protected IWeaponController weapon;
 
         public void SetWeapon(IWeaponController weapon) {
@@ -14,7 +17,7 @@ namespace BotArena
         protected abstract float GetDamage();
 
         public virtual void RobotHit(RobotController hit, float impactVelocity) {
-            float damage = impactVelocity * GetDamage();
+            float damage = Mathf.Clamp(impactVelocity * GetDamage(), MINIMUM_DAMAGE, MAXIMUM_DAMAGE);
             hit.TakeDamage(damage);
         }
 

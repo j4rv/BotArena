@@ -7,7 +7,7 @@ namespace BotArena
     internal class MatchManager : MonoBehaviour
     {
         private static readonly string SCENE_TO_LOAD                =   "Match";
-        private static readonly int    TURN_LIMIT                   =   250;
+        private static readonly int    TURN_LIMIT                   =   500;
         private static readonly float  DAMAGE_PER_TURN_AFTER_LIMIT  =   0.5f;
 
         private static MatchManager instance = null;

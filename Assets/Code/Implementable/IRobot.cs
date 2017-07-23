@@ -18,7 +18,7 @@ namespace BotArena
         internal float maxHealth = 100;
         internal float maxEnergy = 100;
         internal float agility = 10;
-        internal float energyRecoveryRate = 2;
+        internal float energyRecoveryRate = 1.5f;
 
         internal IRobot()
         {

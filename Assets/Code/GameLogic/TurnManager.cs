@@ -4,6 +4,8 @@ namespace BotArena
 {
     public class TurnManager : MonoBehaviour
     {
+        //A turn every two timesteps, TODO: Make it configurable
+        private static readonly int TIMESTEPS_PER_TURN = 2;
 
         [SerializeField]
         private long timeSteps;
@@ -30,8 +32,7 @@ namespace BotArena
         }
 
         public static bool IsTurnUpdate() {
-            //A turn every two timesteps
-            return Get().timeSteps % 2 == 0;
+            return Get().timeSteps % TIMESTEPS_PER_TURN == 0;
         }
     }
 }
