@@ -16,10 +16,8 @@ namespace BotArena {
 
         private string GetMatchText() {
             string res = "";
-            MatchManager.Instance().
-                robotsMatchData.
-                ForEach(
-                d => res += d.ToString() + "\n");
+            DataManager.robotsMatchData.ForEach( d =>
+                res += d.ToString() + "\n");
             res += string.Format("Round: {0}", MatchManager.Instance().round);
             return res;
         }
