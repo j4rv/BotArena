@@ -5,12 +5,11 @@ namespace BotArena {
     class DataManager 
     {
         static readonly string ROBOTS_PATH = @"./Libraries/";
-        static readonly string LOAD_SCENE = "LoadScene";
 
 		static DataManager instance;
 
 		GameConfig gameConfig;
-        List<PlayerMatchData> robotsMatchData;
+        readonly List<PlayerMatchData> robotsMatchData;
 
 		/**
 		 * Private constructor
@@ -22,20 +21,20 @@ namespace BotArena {
 
 		public static void Init(){
 			if (instance == null) {
-				List<PlayerMatchData> robotsMatchData = new List<PlayerMatchData>();
-				instance = new DataManager(robotsMatchData);
-				GameConfig gameConfig = instance.gameConfig;
+				List<PlayerMatchData> matchData = new List<PlayerMatchData>();
+				instance = new DataManager(matchData);
+				GameConfig config = instance.gameConfig;
 
-				Time.timeScale = gameConfig.gameSpeed;
-				Debug.Log(JsonUtility.ToJson(gameConfig));
-				Debug.Log("Setting time scale to: " + gameConfig.gameSpeed);
+				Time.timeScale = config.gameSpeed;
+				Debug.Log(JsonUtility.ToJson(config));
+				Debug.Log("Setting time scale to: " + config.gameSpeed);
 				
 				//Instantiating players and their robots
-				foreach (GameConfig.PlayerConfig playerConfig in gameConfig.robots) {
+				foreach (GameConfig.PlayerConfig playerConfig in config.robots) {
 					string robotLibrary = ROBOTS_PATH + playerConfig.filename;
 					IRobot robot = DllUtil.CreateRobotFromDll(robotLibrary, playerConfig.robotToLoad);
 					PlayerMatchData playerMatchData = new PlayerMatchData(playerConfig.playerNickname, robot, null);
-					robotsMatchData.Add(playerMatchData);
+					matchData.Add(playerMatchData);
 
 					if (robot != null) {
 						Debug.Log("Added robot '" + robot.GetName() + "' from player '" + playerConfig.playerNickname + "'");
