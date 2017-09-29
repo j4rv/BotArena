@@ -40,12 +40,12 @@ namespace BotArena
         }
 
         void FixedUpdate() {
-            if (DataManager.robotsMatchData.Count > 0
+			if (DataManager.GetRobotsMatchData().Count > 0
                     && TurnManager.IsTurnUpdate()
                     && matchInProgress == true) {
 
                 Instance().aliveBots.Clear();
-                foreach (PlayerMatchData playerMatchData in DataManager.robotsMatchData){
+                foreach (PlayerMatchData playerMatchData in DataManager.GetRobotsMatchData()){
                     RobotTurnOperations(playerMatchData);
                 }
 
@@ -94,7 +94,7 @@ namespace BotArena
         }
 
         private static void InstantiateRobots() {
-            foreach (PlayerMatchData playerMatchData in DataManager.robotsMatchData) {
+            foreach (PlayerMatchData playerMatchData in DataManager.GetRobotsMatchData()) {
                 Vector3 randomPosition = RandomUtil.RandomPositionInsideMap();
                 Vector3 randomRotation = RandomUtil.RandomRotationHorizontal();
                 RobotController robotController = RobotPrefabFactory.Create(playerMatchData.robot, randomPosition, Quaternion.Euler(randomRotation));

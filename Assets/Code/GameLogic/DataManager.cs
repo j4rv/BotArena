@@ -1,41 +1,60 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace BotArena { 
-    internal class DataManager : MonoBehaviour
+    class DataManager 
     {
-        private static readonly string ROBOTS_PATH = @"./Libraries/";
-        private static readonly string LOAD_SCENE = "LoadScene";
-        private static readonly string SCENE_AFTER_LOADING = "Match";
+        static readonly string ROBOTS_PATH = @"./Libraries/";
+        static readonly string LOAD_SCENE = "LoadScene";
 
-        private GameConfig gameConfig = GameConfig.Instance();
-        public static List<PlayerMatchData> robotsMatchData;
+		static DataManager instance;
 
-        void Start () {
-            if (SceneManager.GetActiveScene().name == LOAD_SCENE) { 
-                DataManager dataManager = (DataManager) FindObjectOfType(typeof(DataManager));
-                DontDestroyOnLoad(dataManager.gameObject);
+		GameConfig gameConfig;
+        List<PlayerMatchData> robotsMatchData;
 
-                robotsMatchData = new List<PlayerMatchData>();
-                Time.timeScale = gameConfig.gameSpeed;
-                Debug.Log(JsonUtility.ToJson(gameConfig));
-                Debug.Log("Setting time scale to: " + gameConfig.gameSpeed);
-                foreach (GameConfig.PlayerConfig playerConfig in gameConfig.robots) {
-                    string robotLibrary = ROBOTS_PATH + playerConfig.filename;
-                    IRobot robot = DllUtil.CreateRobotFromDll(robotLibrary, playerConfig.robotToLoad);
-                    PlayerMatchData playerMatchData = new PlayerMatchData(playerConfig.playerNickname, robot, null);
-                    robotsMatchData.Add(playerMatchData);
+		/**
+		 * Private constructor
+		 */
+        DataManager(List<PlayerMatchData> robotsMatchData){
+			this.robotsMatchData = robotsMatchData;
+			this.gameConfig = GameConfig.Instance();
+		}
 
-                    if (robot != null)
-                        Debug.Log("Added robot '" + robot.GetName() + "' from player '" + playerConfig.playerNickname + "'");
-                    else
-                        Debug.Log("Added null robot from player '" + playerConfig.playerNickname + "'. Did you provide a valid dll file path?");
-                }
+		public static void Init(){
+			if (instance == null) {
+				List<PlayerMatchData> robotsMatchData = new List<PlayerMatchData>();
+				instance = new DataManager(robotsMatchData);
+				GameConfig gameConfig = instance.gameConfig;
 
-                SceneManager.LoadScene(SCENE_AFTER_LOADING);
-            }
+				Time.timeScale = gameConfig.gameSpeed;
+				Debug.Log(JsonUtility.ToJson(gameConfig));
+				Debug.Log("Setting time scale to: " + gameConfig.gameSpeed);
+				
+				//Instantiating players and their robots
+				foreach (GameConfig.PlayerConfig playerConfig in gameConfig.robots) {
+					string robotLibrary = ROBOTS_PATH + playerConfig.filename;
+					IRobot robot = DllUtil.CreateRobotFromDll(robotLibrary, playerConfig.robotToLoad);
+					PlayerMatchData playerMatchData = new PlayerMatchData(playerConfig.playerNickname, robot, null);
+					robotsMatchData.Add(playerMatchData);
+
+					if (robot != null) {
+						Debug.Log("Added robot '" + robot.GetName() + "' from player '" + playerConfig.playerNickname + "'");
+					} else {
+						Debug.Log("Added null robot from player '" + playerConfig.playerNickname + "'. Did you provide a valid dll file path?");
+					}
+				}
+			}
+		}
+
+        static DataManager GetInstance () {
+            if (instance == null) {
+					Init();
+			}
+			return instance;
         }       
 	
+		public static List<PlayerMatchData> GetRobotsMatchData() {
+			return GetInstance().robotsMatchData;
+		}
     }
 }
