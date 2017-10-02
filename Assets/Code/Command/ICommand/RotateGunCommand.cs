@@ -1,19 +1,17 @@
 ﻿using UnityEngine;
 
-namespace BotArena
-{
-    internal class RotateGunCommand : ICommand
-    {
+namespace BotArena {
+    
+    class RotateGunCommand : ICommand {
 
-        private float speed = 0f;
+        float speed;
 
         public RotateGunCommand(RobotController controller) {
             robotController = controller;
         }
 
-        public void SetSpeed(float speed) {
-            speed = Mathf.Clamp(speed, -5, 5);
-            this.speed = speed;
+        public void SetSpeed(float desiredSpeed) {
+            speed = Mathf.Clamp(desiredSpeed, -6, 6);
         }
 
         //Abstract methods implemented

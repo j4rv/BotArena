@@ -2,16 +2,17 @@
 
 namespace BotArena
 {
-    internal abstract class IProjectileController : MonoBehaviour
+    abstract class IProjectileController : MonoBehaviour
     {
-        private static readonly float MINIMUM_DAMAGE = 1;
-        private static readonly float MAXIMUM_DAMAGE = 80; //Let's limit one hit kills
+        static readonly float MINIMUM_DAMAGE = 1;
+        static readonly float MAXIMUM_DAMAGE = 80; //Let's limit one hit kills
 
         protected IWeaponController weapon;
 
         public void SetWeapon(IWeaponController weapon) {
-            if (weapon == null)
+            if (weapon == null) {
                 this.weapon = weapon;
+            }
         }
 
         protected abstract float GetDamage();

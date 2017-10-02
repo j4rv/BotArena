@@ -1,52 +1,52 @@
-﻿using BotArena;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using System.Collections.Generic;
 
-internal class RobotMatchData {
+namespace BotArena {
+    class RobotMatchData {
 
-    public RobotController controller;
-    public IRobot robot;
+        public RobotController controller;
+        public IRobot robot;
 
-    private List<int> matchResults;
+        readonly List<int> matchResults;
 
-    public RobotMatchData(IRobot robot, RobotController controller) {
-        this.robot = robot;
-        this.controller = controller;
-        matchResults = new List<int>();
-    }
-
-    public void AddMatch(int result) {
-        matchResults.Add(result);
-    }
-
-    public int VictoriesCount() {
-        int res = 0;
-
-        foreach (int i in matchResults){
-            res += i == 1 ? 1 : 0;
+        public RobotMatchData(IRobot robot, RobotController controller) {
+            this.robot = robot;
+            this.controller = controller;
+            matchResults = new List<int>();
         }
 
-        return res;
-    }
-
-    public int LossesCount() {
-        int res = 0;
-
-        foreach (int i in matchResults) {
-            res += i == -1 ? 1 : 0;
+        public void AddMatch(int result) {
+            matchResults.Add(result);
         }
 
-        return res;
-    }
+        public int VictoriesCount() {
+            int res = 0;
 
-    public int Points() {
-        int res = 0;
+            foreach (int i in matchResults) {
+                res += i == 1 ? 1 : 0;
+            }
 
-        foreach (int i in matchResults) {
-            res += i;
+            return res;
         }
 
-        return res;
-    }
+        public int LossesCount() {
+            int res = 0;
 
+            foreach (int i in matchResults) {
+                res += i == -1 ? 1 : 0;
+            }
+
+            return res;
+        }
+
+        public int Points() {
+            int res = 0;
+
+            foreach (int i in matchResults) {
+                res += i;
+            }
+
+            return res;
+        }
+
+    }
 }

@@ -49,8 +49,9 @@ namespace BotArena
         }
 
         internal void ConsumeEnergy(float consumption) {
-            if (consumption >= 0)
+            if (consumption >= 0) {
                 energy -= consumption;
+            }
         }
 
         public float GetAgility() {
@@ -58,8 +59,9 @@ namespace BotArena
         }
 
         internal void TakeDamage(float damage) {
-            if (damage >= 0)
+            if (damage >= 0) {
                 health -= damage;
+            }
         }
 
         readonly Dictionary<Command, int> commandToTurn = new Dictionary<Command, int>();

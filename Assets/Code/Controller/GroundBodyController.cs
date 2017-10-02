@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 
-namespace BotArena
-{
-    public class GroundBodyController : BodyController
-    {
-        private bool onTheGround;
+namespace BotArena {
+    
+    class GroundBodyController : BodyController {
+        
+        bool onTheGround;
 
         void OnCollisionEnter(Collision collision) {
             if (collision.transform.tag == Tags.GROUND) {

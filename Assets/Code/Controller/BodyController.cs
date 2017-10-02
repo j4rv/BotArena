@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
 
-public class BodyController : MonoBehaviour
-{
+namespace BotArena {
+    
+    class BodyController : MonoBehaviour {
+        
+        public virtual bool CanMove() { return true; }
 
-    public virtual bool CanMove() { return true; }
-
+    }
 }

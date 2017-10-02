@@ -1,19 +1,16 @@
 ﻿using UnityEngine;
 
-namespace BotArena
-{
-    internal class RotateCommand : ICommand
-    {
+namespace BotArena {
+    class RotateCommand : ICommand {
 
-        private float speed = 0f;
+        float speed;
 
         public RotateCommand(RobotController controller) {
             robotController = controller;
         }
 
-        public void SetSpeed(float speed) {
-            speed = Mathf.Clamp(speed, -5, 5);
-            this.speed = speed;
+        public void SetSpeed(float desiredSpeed) {
+            speed = Mathf.Clamp(desiredSpeed, -4, 4);
         }
 
         //Abstract methods implemented

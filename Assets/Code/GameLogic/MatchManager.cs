@@ -63,10 +63,11 @@ namespace BotArena
 
                 robotController.TurnUpdate();
 
-                if (robotController.IsAlive())
+                if (robotController.IsAlive()) {
                     Instance().aliveBots.Add(playerMatchData);
-                else
+                } else {
                     Instance().deadBots.Add(playerMatchData);
+                }
             }
         }
 

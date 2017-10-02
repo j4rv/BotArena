@@ -3,18 +3,17 @@ using UnityEngine;
 
 namespace BotArena
 {
-    internal class AttackCommand : ICommand
+    class AttackCommand : ICommand
     {
 
-        private float power;
+        float power;
 
         public AttackCommand(RobotController controller) {
             robotController = controller;
         }
 
-        public void SetPower(float power) {
-            this.power = Mathf.Clamp(power, 0.5f, 5f);
-            //Debug.Log("Got " + power + " attack power; now it's " + this.power);
+        public void SetPower(float desiredPower) {
+            power = Mathf.Clamp(desiredPower, 0.5f, 5f);
         }
 
         protected override int GetCooldown() {
