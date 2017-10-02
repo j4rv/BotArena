@@ -1,14 +1,15 @@
-﻿
-using UnityEngine;
-namespace BotArena
-{
-    internal class DestroyAnythingOnCollisionController : MonoBehaviour
-    {
+﻿using UnityEngine;
 
-        private void OnCollisionEnter(Collision collision) {
-            if (collision.transform.tag == Tags.ROBOT)
+namespace BotArena {
+    class DestroyAnythingOnCollisionController : MonoBehaviour {
+
+        void OnCollisionEnter(Collision collision) {
+            if (collision.transform.tag == Tags.ROBOT) {
+                // TODO This should get replaced with a Destroy function.
                 collision.transform.GetComponent<RobotController>().TakeDamage(10000);
-            else Destroy(collision.gameObject);
+            } else {
+                Destroy(collision.gameObject);
+            }
         }
 
     }

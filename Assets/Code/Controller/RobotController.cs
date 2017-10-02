@@ -29,7 +29,7 @@ namespace BotArena
 
         //              UNITY METHODS
 
-        LinkedList<Collision> collisions = new LinkedList<Collision>();
+        readonly LinkedList<Collision> collisions = new LinkedList<Collision>();
         void OnCollisionEnter(Collision collision) {
             collisions.AddLast(collision);
 
@@ -62,7 +62,7 @@ namespace BotArena
                 health -= damage;
         }
 
-        Dictionary<Command, int> commandToTurn = new Dictionary<Command, int>();
+        readonly Dictionary<Command, int> commandToTurn = new Dictionary<Command, int>();
         public int GetLastTurnExecuted(Command cmd) {
             int result;
             commandToTurn.TryGetValue(cmd, out result);
@@ -153,7 +153,7 @@ namespace BotArena
 
         //              EVENT CHECKERS
 
-         void NewTurnEventChecks() {
+        void NewTurnEventChecks() {
             //Clear the previous turn's events and collisions
             robotThreadSharedData.events.Clear();
             collisions.Clear();

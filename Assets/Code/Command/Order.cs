@@ -7,52 +7,83 @@ namespace BotArena
 {
     public class Order
     {
-        private RobotController controller;
-        private bool executed;
-        private SortedList<Command, ICommand> commands;
-        private int turn;
+        readonly RobotController controller;
+        bool executed;
+        SortedList<Command, ICommand> commands;
+        int turn;
+		static object orderLock = new object();
 
 
-        internal Order(RobotController controller, int turn) {
+        internal Order(RobotController robotController, int currentTurn) {
             commands = new SortedList<Command, ICommand>();
-            this.controller = controller;
-            this.turn = turn;
+            controller = robotController;
+            turn = currentTurn;
         }
 
-        public bool IsExecuted() {
-            lock (this)
+		/// <summary>
+		/// Returns the turn in which this command was created.
+		/// </summary>
+		/// <returns>The turn as an int.</returns>
+        public int GetTurn()
+		{
+			lock (orderLock) {
+				return turn;
+			}
+		}
+
+		/// <summary>
+		/// Adds the command.
+		/// </summary>
+		/// <returns><c>true</c>, if command was added, <c>false</c> otherwise.</returns>
+		/// <param name="cmd">The command.</param>
+		/// <param name="args">Arguments for the command (speed, rotation...).</param>
+		public bool AddCommand(Command cmd, params object[] args)
+		{
+			lock (orderLock) {
+				bool res = commands.Remove(cmd);
+				ICommand command = CommandFactory.Create(cmd, controller, args);
+				commands.Add(cmd, command);
+
+				return res;
+			}
+		}
+
+		/// <returns><c>true</c>, if command was removed, <c>false</c> otherwise.</returns>
+		/// <param name="cmd">Cmd.</param>
+		public bool RemoveCommand(Command cmd)
+		{
+			lock (orderLock) {
+				return commands.Remove(cmd);
+			}
+		}
+
+		/// <summary>
+		/// Reset the commands list.
+		/// </summary>
+		public void Reset()
+		{
+			lock (orderLock) {
+				commands.Clear();
+			}
+		}
+
+        internal bool IsExecuted() {
+			lock (orderLock) {
                 return executed;
+			}
         }
 
-        public void Executed() {
-            lock (this)
+        internal void Executed() {
+			lock (orderLock){
                 executed = true;
+			}
         }
 
-        public int GetTurn() {
-            lock (this)
-                return turn;
-        }
 
         internal List<ICommand> GetCommands() {
-            lock (this)
+			lock (orderLock) {
                 return commands.Values.ToList();
-        }
-
-        /// Returns true if a command was overriden
-        public bool AddCommand(Command cmd, params object[] args) {
-            lock (this) {
-                bool res = commands.Remove(cmd);
-                ICommand command = CommandFactory.Create(cmd, controller, args);
-                commands.Add(cmd, command);
-                
-                return res;
-            }
-        }
-
-        public void Reset() {
-            lock (this)
-                commands.Clear();
+			}
         }
     }
 }

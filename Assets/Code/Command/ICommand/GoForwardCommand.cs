@@ -2,18 +2,17 @@
 
 namespace BotArena
 {
-    internal class GoForwardCommand : ICommand
+    class GoForwardCommand : ICommand
     {
 
-        private float speed = 0f;
+        float speed;
 
         public GoForwardCommand(RobotController controller) {
             robotController = controller;
         }
 
-        public void SetSpeed(float speed) {
-            speed = Mathf.Clamp(speed, -5, 5);
-            this.speed = speed;
+        public void SetSpeed(float desiredSpeed) {
+            speed = Mathf.Clamp(desiredSpeed, -6, 6);
         }
 
         //Abstract methods implemented
@@ -22,14 +21,16 @@ namespace BotArena
             return base.CanExecute() && robotController.body.CanMove();
         }
 
+		/// <summary>
+		/// Move the robot forward/backwards.
+		/// </summary>
         protected override void Execute() {
-            //Go forward
             robotController.GetComponent<Rigidbody>().velocity = robotController.transform.forward * speed;
             robotController.ConsumeEnergy(GetEnergyCost());
         }
 
         public override float GetEnergyCost() {
-            return Mathf.Abs(speed) / robotController.GetAgility();
+            return Mathf.Abs(speed) * 1.2f / robotController.GetAgility();
         }
 
         public override Command GetCommand() {
