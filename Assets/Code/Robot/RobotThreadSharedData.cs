@@ -3,10 +3,10 @@ using System.Linq;
 
 namespace BotArena
 {
-    public class RobotThreadSharedData
+    class RobotThreadSharedData
     {
-        public List<Order> orders;
-        public List<IEvent> events;
+        internal List<Order> orders;
+        internal List<IEvent> events;
 
         public RobotThreadSharedData() {
             orders = new List<Order>();

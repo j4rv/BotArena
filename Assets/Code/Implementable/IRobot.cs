@@ -2,17 +2,15 @@
 using System.Collections.Generic;
 
 
-namespace BotArena
-{
-    public abstract class IRobot
-    {
+namespace BotArena {
+    public abstract class IRobot {
         public RobotInfo info;
 
         protected string name;
         protected Order order;
         protected HashSet<RobotInfo> enemies;
 
-        RobotThread robotThread;
+        readonly RobotThread robotThread;
 
         //default values, can be overriden depending on the robot
         internal float maxHealth = 100;
@@ -20,7 +18,7 @@ namespace BotArena
         internal float agility = 10;
         internal float energyRecoveryRate = 1.5f;
 
-        internal IRobot(){
+        protected IRobot(){
             info = new RobotInfo();
             robotThread = new RobotThread();
         }

@@ -43,6 +43,9 @@ namespace BotArena
 
                         break;
                     }
+
+                default:
+                    throw new ArgumentException("Bad Command parameter");
             }
 
             return res;

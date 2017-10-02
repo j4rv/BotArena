@@ -10,7 +10,7 @@ namespace BotArena
         readonly RobotController controller;
         bool executed;
         SortedList<Command, ICommand> commands;
-        int turn;
+        readonly int turn;
 		static object orderLock = new object();
 
 

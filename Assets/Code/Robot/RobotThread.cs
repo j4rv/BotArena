@@ -33,6 +33,8 @@ namespace BotArena
         }
 
 
-        void Nothing() { }
+        void Nothing() { 
+            // Empty method for the constructor
+        }
     }
 }
