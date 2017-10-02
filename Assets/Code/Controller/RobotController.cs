@@ -4,17 +4,17 @@ using UnityEngine;
 
 namespace BotArena
 {
-    internal class RobotController : MonoBehaviour
+    class RobotController : MonoBehaviour
     {
         public IRobot robot;
-        private RobotThreadSharedData robotThreadSharedData;
+        RobotThreadSharedData robotThreadSharedData;
 
         [SerializeField]
         public IWeaponController weapon;
         [SerializeField]
         public BodyController body;
         [SerializeField]
-        private Transform radar;
+        Transform radar;
 
         public float health;
         public float energy;
@@ -29,13 +29,7 @@ namespace BotArena
 
         //              UNITY METHODS
 
-        /*void FixedUpdate() {
-            if (MatchManager.Instance().matchInProgress && TurnManager.IsTurnUpdate()) {
-                TurnUpdate();
-            }
-        }*/
-
-        private LinkedList<Collision> collisions = new LinkedList<Collision>();
+        LinkedList<Collision> collisions = new LinkedList<Collision>();
         void OnCollisionEnter(Collision collision) {
             collisions.AddLast(collision);
 
@@ -68,22 +62,27 @@ namespace BotArena
                 health -= damage;
         }
 
-        private Dictionary<Command, int> commandToTurn = new Dictionary<Command, int>();
+        Dictionary<Command, int> commandToTurn = new Dictionary<Command, int>();
         public int GetLastTurnExecuted(Command cmd) {
             int result;
             commandToTurn.TryGetValue(cmd, out result);
             return result;
         }
 
-        private HashSet<IRobot> FindEnemies() {
-            HashSet<IRobot> res = new HashSet<IRobot>();
+		/// <summary>
+		/// Finds all robot instances, except this robotController.
+		/// </summary>
+        void FindEnemies() {
+            HashSet<RobotInfo> res = new HashSet<RobotInfo>();
             GameObject[] robots = GameObject.FindGameObjectsWithTag(Tags.ROBOT);
 
-            foreach (GameObject robot in robots) {
-                res.Add(robot.GetComponent<IRobot>());
+            foreach (GameObject r in robots) {
+				if (r != gameObject){
+                	res.Add(r.GetComponent<RobotController>().robot.info);
+				}
             }
 
-            return res;
+			robot.SetEnemies(res);
         }
 
         //              TURN METHODS
@@ -96,25 +95,26 @@ namespace BotArena
 
                 CreateOrderForNextTurn();
                 NewTurnEventChecks();
+				FindEnemies();
                 RunNewTurnOnRobotThread();
             } else {
                 CheckDeath();
             }
         }
 
-        private void TurnUpdateStats() {
+        void TurnUpdateStats() {
             energy = Mathf.Clamp(energy + robot.energyRecoveryRate, 0, robot.maxEnergy);    //Recover some energy
-            //TODO: Heal a bit over time? Stop healing for x turns after receiving damage?
+            // TODO: Heal a bit over time? Stop healing for x turns after receiving damage?
         }
 
-        private void UpdateRobotInfo() {
+        void UpdateRobotInfo() {
             Vector3 pos = transform.position;
             Vector3 rot = transform.rotation.eulerAngles;
             Vector3 gunRot = weapon.transform.rotation.eulerAngles;
             robot.UpdateInfo(health, energy, GetAgility(), pos, rot, gunRot);
         }
 
-        private void ExecuteLastOrder() {
+        void ExecuteLastOrder() {
             int currentTurn = TurnManager.GetCurrentTurn();
             int lastTurn = currentTurn - 1;
             Order lastOrder = robotThreadSharedData.GetLastOrder();
@@ -135,24 +135,25 @@ namespace BotArena
             }
         }
 
-        private void CreateOrderForNextTurn() {
+        void CreateOrderForNextTurn() {
             int turn = TurnManager.GetCurrentTurn();
             Order order = new Order(this, turn);
             robotThreadSharedData.orders.Add(order);
         }
 
-        private void RunNewTurnOnRobotThread() {
+        void RunNewTurnOnRobotThread() {
             //We try to start a new turn. If we can't, we'll apply a damage penalty
             bool turnLost = !robot.StartTurn(robotThreadSharedData);
 
-            if (turnLost)
-                TakeDamage(10);
+			if (turnLost) {
+				TakeDamage(5);
+			}
         }
 
 
         //              EVENT CHECKERS
 
-        private void NewTurnEventChecks() {
+         void NewTurnEventChecks() {
             //Clear the previous turn's events and collisions
             robotThreadSharedData.events.Clear();
             collisions.Clear();
@@ -161,7 +162,7 @@ namespace BotArena
             CheckWallHit();
         }
 
-        private void CheckRobotAhead() {
+        void CheckRobotAhead() {
             RaycastHit hit;
 
             if (Physics.Raycast(transform.position, radar.transform.forward, out hit)) {
@@ -174,8 +175,8 @@ namespace BotArena
             }
         }
 
-        private Collision wallHit;
-        private void CheckWallHit() {
+        Collision wallHit;
+        void CheckWallHit() {
             if (wallHit != null) {
                 WallHitEvent e = new WallHitEvent(wallHit);
                 robotThreadSharedData.events.Add(e);
@@ -184,7 +185,7 @@ namespace BotArena
             wallHit = null;
         }
 
-        private void CheckDeath() {
+        void CheckDeath() {
             DeathEvent death = new DeathEvent(robot);
             robotThreadSharedData.events.Add(death);
             UpdateRobotInfo();

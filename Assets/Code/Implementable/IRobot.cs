@@ -12,7 +12,7 @@ namespace BotArena
         protected Order order;
         protected HashSet<RobotInfo> enemies;
 
-        private RobotThread robotThread;
+        RobotThread robotThread;
 
         //default values, can be overriden depending on the robot
         internal float maxHealth = 100;
@@ -20,8 +20,7 @@ namespace BotArena
         internal float agility = 10;
         internal float energyRecoveryRate = 1.5f;
 
-        internal IRobot()
-        {
+        internal IRobot(){
             info = new RobotInfo();
             robotThread = new RobotThread();
         }
@@ -29,14 +28,12 @@ namespace BotArena
 
         //              THREAD METHODS
 
-        internal bool StartTurn(RobotThreadSharedData robotData)
-        {
+        internal bool StartTurn(RobotThreadSharedData robotData){
             return robotThread.newTurn(() => Run(robotData));
         }
 
         //This runs on robotThread.
-        private void Run(RobotThreadSharedData robotData)
-        {
+        void Run(RobotThreadSharedData robotData){
             order = robotData.GetLastOrder();
             Think();
 
@@ -49,8 +46,7 @@ namespace BotArena
 
         //              ROBOT METHODS
              
-        internal void UpdateInfo(float hp, float en, float ag, Vector3 pos, Vector3 rot, Vector3 gunRot)
-        {
+        internal void UpdateInfo(float hp, float en, float ag, Vector3 pos, Vector3 rot, Vector3 gunRot){
             info.health = hp;
             info.energy = en;
             info.agility = ag;
@@ -59,10 +55,13 @@ namespace BotArena
             info.gunRotation = gunRot;
         }
 
-        public string GetName()
-        {
+        public string GetName(){
             return name;
         }
+
+		internal void SetEnemies(HashSet<RobotInfo> enemiesSet){
+			enemies = enemiesSet;
+		}
         
         //              ABSTRACT METHODS
 

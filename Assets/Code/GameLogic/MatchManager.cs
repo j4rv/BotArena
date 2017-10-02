@@ -4,13 +4,13 @@ using UnityEngine.SceneManagement;
 
 namespace BotArena
 {
-    internal class MatchManager : MonoBehaviour
+    class MatchManager : MonoBehaviour
     {
-        private static readonly string SCENE_TO_LOAD                =   "Match";
-        private static readonly int    TURN_LIMIT                   =   500;
-        private static readonly float  DAMAGE_PER_TURN_AFTER_LIMIT  =   0.5f;
+        static readonly string SCENE_TO_LOAD                =   "Match";
+        static readonly int    TURN_LIMIT                   =   500;
+        static readonly float  DAMAGE_PER_TURN_AFTER_LIMIT  =   0.5f;
 
-        private static MatchManager instance = null;
+        static MatchManager instance = null;
 
         HashSet<PlayerMatchData> aliveBots;
         HashSet<PlayerMatchData> deadBots;
@@ -86,14 +86,14 @@ namespace BotArena
             }
         }
 
-        private static void NewRound() {
+        static void NewRound() {
             InstantiateRobots();
 
             Instance().round++;
             Instance().matchInProgress = true;
         }
 
-        private static void InstantiateRobots() {
+        static void InstantiateRobots() {
             foreach (PlayerMatchData playerMatchData in DataManager.GetRobotsMatchData()) {
                 Vector3 randomPosition = RandomUtil.RandomPositionInsideMap();
                 Vector3 randomRotation = RandomUtil.RandomRotationHorizontal();
