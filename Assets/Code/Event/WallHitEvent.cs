@@ -4,7 +4,7 @@ namespace BotArena
 {
     public class WallHitEvent : IEvent
     {
-        public Collision wallCollision;
+        Collision wallCollision;
 
         public WallHitEvent(Collision wallCollision) {
             this.wallCollision = wallCollision;

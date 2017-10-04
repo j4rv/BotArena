@@ -2,7 +2,7 @@
 
 namespace BotArena
 {
-    internal class RobotPrefabFactory
+    static class RobotPrefabFactory
     {
         public static RobotController Create(IRobot robot, Vector3 position, Quaternion rotation) {
             RobotController res = null;

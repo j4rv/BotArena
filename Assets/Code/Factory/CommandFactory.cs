@@ -2,7 +2,7 @@
 
 namespace BotArena
 {
-    class CommandFactory
+    static class CommandFactory
     {
         public static ICommand Create(Command cmd, RobotController controller, params object[] args) {
             ICommand res = null;

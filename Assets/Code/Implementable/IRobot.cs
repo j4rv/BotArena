@@ -1,10 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-
 namespace BotArena {
     public abstract class IRobot {
-        public RobotInfo info;
+        RobotInfo info;
 
         protected string name;
         protected Order order;
@@ -55,6 +54,10 @@ namespace BotArena {
 
         public string GetName(){
             return name;
+        }
+
+        public RobotInfo GetInfo(){
+            return info;
         }
 
 		internal void SetEnemies(HashSet<RobotInfo> enemiesSet){

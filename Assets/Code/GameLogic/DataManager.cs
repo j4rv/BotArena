@@ -8,7 +8,7 @@ namespace BotArena {
 
 		static DataManager instance;
 
-		GameConfig gameConfig;
+		readonly GameConfig gameConfig;
         readonly List<PlayerMatchData> robotsMatchData;
 
 		/**

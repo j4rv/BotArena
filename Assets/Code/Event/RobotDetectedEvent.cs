@@ -2,7 +2,7 @@
 {
     public class RobotDetectedEvent : IEvent
     {
-        public RobotInfo robotInfo;
+        RobotInfo robotInfo;
 
         public RobotDetectedEvent(RobotInfo robotInfo) {
             this.robotInfo = robotInfo;

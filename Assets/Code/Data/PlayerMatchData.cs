@@ -1,11 +1,9 @@
-﻿using BotArena;
-using System.Collections.Generic;
-
+﻿using System.Collections.Generic;
 
 namespace BotArena { 
-    internal class PlayerMatchData {
+    class PlayerMatchData {
 
-        private static readonly Dictionary<MatchResult, int> RESULT_POINTS = new Dictionary<MatchResult, int>() {
+        static readonly Dictionary<MatchResult, int> RESULT_POINTS = new Dictionary<MatchResult, int>() {
             { MatchResult.VICTORY, 100 },
             { MatchResult.DRAW, 50 },
             { MatchResult.LOSS, 0 }
@@ -14,9 +12,9 @@ namespace BotArena {
         public RobotController controller;
         public IRobot robot;
 
-        private readonly string playerName;
-        private long points;
-        private List<MatchResult> matchResults;
+        readonly string playerName;
+        readonly List<MatchResult> matchResults;
+        long points;
 
         public PlayerMatchData(string playerName, IRobot robot, RobotController controller) {
             this.playerName = playerName;

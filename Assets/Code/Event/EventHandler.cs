@@ -2,7 +2,7 @@
 
 namespace BotArena
 {
-    public class EventHandler
+    public static class EventHandler
     {
         public static void HandleEvent(IEvent eventToHandle, IRobot robot) {
             if (eventToHandle is RobotDetectedEvent) {
