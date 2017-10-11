@@ -2,7 +2,7 @@
 {
     public class DeathEvent : IEvent
     {
-        IRobot deadRobot;
+        public IRobot deadRobot { get; internal set;}
 
         public IRobot DeadRobot {
             get { return deadRobot; }

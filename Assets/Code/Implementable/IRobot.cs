@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 namespace BotArena {
     public abstract class IRobot {
-        RobotInfo info;
 
+        public RobotInfo info                   { get; internal set;}
         protected string name;
         protected Order order;
         protected HashSet<RobotInfo> enemies;
