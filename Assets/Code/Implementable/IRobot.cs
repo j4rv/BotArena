@@ -43,7 +43,8 @@ namespace BotArena {
 
         //              ROBOT METHODS
              
-        internal void UpdateInfo(float hp, float en, float ag, Vector3 pos, Vector3 rot, Vector3 gunRot){
+        internal void UpdateInfo(float hp, float en, float ag, 
+                                 Vector3 pos, Vector3 rot, Vector3 gunRot){
             info.health = hp;
             info.energy = en;
             info.agility = ag;

@@ -11,13 +11,6 @@
         Transform cameraToShake;
         Vector3 originalPos;
 
-        public static GameObject Instantiate(float Strength, Vector3 position, Quaternion rotation) {
-            GameObject explosion = Instantiate(Resources.Load("Prefabs/ParticleSystems/Explosion"), position, rotation) as GameObject;
-            explosion.transform.localScale *= Strength;
-            explosion.GetComponent<Explosion>().shakeDuration *= Strength;
-            return explosion;
-        }
-
         void Awake() {
             mainParticleSystem = GetComponent<ParticleSystem>();
         }
@@ -26,6 +19,7 @@
             // TODO add flash effect?
             cameraToShake = GameObject.Find("Main Camera").transform;
             originalPos = cameraToShake.localPosition;
+            shakeDuration = transform.localScale.x;
         }
 
         new void Update() {

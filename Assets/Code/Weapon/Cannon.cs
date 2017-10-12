@@ -8,7 +8,7 @@ namespace BotArena
 
         public override void Attack(float power) {
             GameObject res;
-
+            ParticleEffectFactory.Summon("ShootSmoke", 0.5f, projectileSpawner.position, Quaternion.identity);
             res = Instantiate(projectileObject, projectileSpawner.position, projectileSpawner.rotation);
             res.GetComponent<Rigidbody>().velocity = transform.forward * power * 5;
             res.GetComponent<IProjectileController>().SetWeapon(this);
