@@ -17,5 +17,12 @@ namespace BotArena
 
             return res;
         }
+
+        public static void SeparateParticleSystems(GameObject parent){
+            ParticleSystem[] systems = parent.GetComponentsInChildren<ParticleSystem>();
+            foreach(ParticleSystem ps in systems){
+                ps.transform.parent = null;
+            }
+        }
     }
 }

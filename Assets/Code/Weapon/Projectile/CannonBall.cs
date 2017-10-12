@@ -5,8 +5,16 @@ namespace BotArena
 {
     class CannonBall : IProjectileController
     {
+
         protected override float GetDamage() {
 			return 6f;
+        }
+
+        protected override void OnHit() {
+        	//TODO: Instantiate some kind of collision effect
+        	Explosion.Instantiate(1f, transform.position, Quaternion.identity);
+            ChildUtil.SeparateParticleSystems(gameObject);
+            Destroy(gameObject);
         }
     }
 }

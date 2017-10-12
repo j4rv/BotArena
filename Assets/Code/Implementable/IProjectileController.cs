@@ -16,6 +16,7 @@ namespace BotArena
         }
 
         protected abstract float GetDamage();
+        protected abstract void OnHit();
 
         public virtual void RobotHit(RobotController hit, float impactVelocity) {
             float damage = Mathf.Clamp(impactVelocity * GetDamage(), MINIMUM_DAMAGE, MAXIMUM_DAMAGE);
@@ -27,10 +28,7 @@ namespace BotArena
                 RobotController robot = collision.gameObject.GetComponent<RobotController>();
                 RobotHit(robot, collision.relativeVelocity.magnitude);
             }
-            //TODO: Instantiate some kind of collision effect
-            GameObject explosion = Instantiate(Resources.Load("Prefabs/ParticleSystems/Explosion"), transform.position, Quaternion.identity) as GameObject;
-            explosion.GetComponent<Explosion>().shakeDuration *= 0.5f;
-            Destroy(gameObject);
+            OnHit();
         }
 
     }

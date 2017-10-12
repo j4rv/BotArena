@@ -192,8 +192,8 @@ namespace BotArena
             robotThreadSharedData.events.Add(death);
             UpdateRobotInfo();
             //TODO: Add some kind of visuals
+            Explosion.Instantiate(2, transform.position, transform.rotation);
             Destroy(gameObject);
-            Destroy(this);
         }
 
     }
