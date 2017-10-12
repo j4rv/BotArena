@@ -192,7 +192,7 @@ namespace BotArena
             robotThreadSharedData.events.Add(death);
             UpdateRobotInfo();
             //TODO: Add some kind of visuals
-            ParticleEffectFactory.Summon("Explosion", 2, transform.position, transform.rotation);
+            ParticleEffectFactory.Summon("Explosion", 1.5f, transform.position, transform.rotation);
             Destroy(gameObject);
         }
 
