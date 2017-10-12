@@ -1,4 +1,6 @@
-# BotArena
+# BotArena 
+
+<img src="https://github.com/J4RV/BotArena/blob/master/Assets/Resources/Textures/Tank%20logo.png" width="96"> 
 
 ## AI Programming Game
 
