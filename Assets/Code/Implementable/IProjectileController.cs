@@ -28,6 +28,8 @@ namespace BotArena
                 RobotHit(robot, collision.relativeVelocity.magnitude);
             }
             //TODO: Instantiate some kind of collision effect
+            GameObject explosion = Instantiate(Resources.Load("Prefabs/ParticleSystems/Explosion"), transform.position, Quaternion.identity) as GameObject;
+            explosion.GetComponent<Explosion>().shakeDuration *= 0.5f;
             Destroy(gameObject);
         }
 
