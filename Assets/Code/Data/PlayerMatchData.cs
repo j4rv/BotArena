@@ -23,6 +23,10 @@ namespace BotArena {
             matchResults = new List<MatchResult>();
         }
 
+        public string getPlayerName(){
+            return playerName;
+        }
+
         public void AddMatch(MatchResult result) {
             matchResults.Add(result);
             points += RESULT_POINTS[result];

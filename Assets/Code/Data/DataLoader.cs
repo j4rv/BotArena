@@ -4,11 +4,11 @@ using System.IO;
 using UnityEngine;
 
 namespace BotArena {
-    internal static class DataLoader {
+    static class DataLoader {
 
-        private static readonly string CONFIG_PATH = @"./config.json";
-        private static readonly string LOADED = "Loaded configuration file.";
-        private static readonly string CREATED = "Created a default configuration file.";
+        static readonly string CONFIG_PATH = @"./config.json";
+        static readonly string LOADED = "Loaded configuration file.";
+        static readonly string CREATED = "Created a default configuration file.";
 
         public static GameConfig LoadGameConfig() {
             if (File.Exists(CONFIG_PATH)) {

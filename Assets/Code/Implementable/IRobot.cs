@@ -5,7 +5,8 @@ namespace BotArena {
     public abstract class IRobot {
 
         public RobotInfo info                   { get; internal set;}
-        protected string name;
+        public string player                    { get; internal set;}
+        public string name;   // TODO change to { get; protected set;}, rebuild and modify defaultBots                     
         protected Order order;
         protected HashSet<RobotInfo> enemies;
 
@@ -51,10 +52,6 @@ namespace BotArena {
             info.position = pos;
             info.rotation = rot;
             info.gunRotation = gunRot;
-        }
-
-        public string GetName(){
-            return name;
         }
 
         public RobotInfo GetInfo(){

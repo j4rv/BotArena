@@ -35,7 +35,6 @@ namespace BotArena {
 				GameConfig config = _instance.gameConfig;
 
 				Time.timeScale = config.gameSpeed;
-                Debug.Log(config.Serialize());
 				Debug.Log("Setting time scale to: " + config.gameSpeed);
 				
 				//Instantiating players and their robots
@@ -46,7 +45,8 @@ namespace BotArena {
 					matchData.Add(playerMatchData);
 
 					if (robot != null) {
-						Debug.Log("Added robot '" + robot.GetName() + "' from player '" + playerConfig.nickname + "'");
+                        robot.player = playerConfig.nickname;
+						Debug.Log("Added robot '" + robot.name + "' from player '" + playerConfig.nickname + "'");
 					} else {
 						Debug.Log("Added null robot from player '" + playerConfig.nickname + "'. Did you provide a valid dll file path?");
 					}
