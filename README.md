@@ -1,4 +1,4 @@
-# BotArena
+# BotArena 
 
 ## AI Programming Game
 
