@@ -1,100 +1,111 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace BotArena
 {
-    class MatchManager : MonoBehaviour
-    {
-        static readonly string SCENE_TO_LOAD                =   "Match";
-        static readonly int    TURN_LIMIT                   =   500;
-        static readonly float  DAMAGE_PER_TURN_AFTER_LIMIT  =   0.5f;
+    class MatchManager : MonoBehaviour {
+        static readonly int TURN_LIMIT = 500;                      //TODO Make it configurable
+        static readonly float DAMAGE_PER_TURN_AFTER_LIMIT = 0.5f;  //TODO Make it configurable
+        static readonly float SECONDS_BEFORE_NEW_ROUND = 2;        //TODO Make it configurable
 
-        static MatchManager instance = null;
-
+        HashSet<PlayerMatchData> aliveBotsLastTurn;
         HashSet<PlayerMatchData> aliveBots;
         HashSet<PlayerMatchData> deadBots;
         public int round;
-        public bool matchInProgress = false;
-        
-        public static MatchManager Instance() {
-            if (instance == null) {
-                instance = (MatchManager) FindObjectOfType(typeof(MatchManager));
-                DontDestroyOnLoad(instance.gameObject);
+        public bool matchInProgress;
 
-                instance.aliveBots = new HashSet<PlayerMatchData>();
-                instance.deadBots = new HashSet<PlayerMatchData>();
-                
-                instance.round = 0;
-            }
-            return instance;
+        public void Init() {
+            aliveBotsLastTurn = new HashSet<PlayerMatchData>();
+            aliveBots = new HashSet<PlayerMatchData>();
+            deadBots = new HashSet<PlayerMatchData>();
+            round = 0;
         }
 
         void Awake() {
-            if(Instance().round < GameConfig.Instance().rounds) {
-                NewRound();
-                matchInProgress = true;
-            } else {
-                Debug.Log("Game ended!");
-            }
+            Init();
+            NewRound();
         }
 
         void FixedUpdate() {
 			if (DataManager.GetRobotsMatchData().Count > 0
                     && TurnManager.IsTurnUpdate()
                     && matchInProgress == true) {
-
-                Instance().aliveBots.Clear();
-                foreach (PlayerMatchData playerMatchData in DataManager.GetRobotsMatchData()){
-                    RobotTurnOperations(playerMatchData);
-                }
-
-                CheckMatchEnd();
+                PreRobotTurns();
+                RobotTurns();
+                PostRobotTurns();
             }
         }        
 
-        static void RobotTurnOperations(PlayerMatchData playerMatchData) {
-            RobotController robotController = playerMatchData.controller;
+        void PreRobotTurns() {
+        	aliveBotsLastTurn.Clear();
+        	aliveBotsLastTurn.UnionWith(aliveBots);
+            aliveBots.Clear();
+        }
 
-            if (robotController) {
-                if (TurnManager.GetCurrentTurn() > TURN_LIMIT) {
-                    robotController.TakeDamage(DAMAGE_PER_TURN_AFTER_LIMIT);
-                }
+        void RobotTurns() {
+        	foreach (PlayerMatchData playerMatchData in DataManager.GetRobotsMatchData()){
+                RobotController robotController = playerMatchData.controller;
 
-                robotController.TurnUpdate();
+                if (robotController) {
+                    if (TurnManager.GetCurrentTurn() > TURN_LIMIT) {
+                        robotController.TakeDamage(DAMAGE_PER_TURN_AFTER_LIMIT);
+                    }
 
-                if (robotController.IsAlive()) {
-                    Instance().aliveBots.Add(playerMatchData);
-                } else {
-                    Instance().deadBots.Add(playerMatchData);
+                    robotController.TurnUpdate();
+
+                    if (robotController.IsAlive()) {
+                        aliveBots.Add(playerMatchData);
+                    } else {
+                        deadBots.Add(playerMatchData);
+                    }
                 }
             }
         }
 
-        static void CheckMatchEnd() {
-            if(Instance().aliveBots.Count == 1) {
+        void PostRobotTurns() {
+        	CheckMatchEnd();
+        }
+
+        void CheckMatchEnd() {
+            if(aliveBots.Count == 1) {
                 //One robot lives, that robot wins!
-                foreach (PlayerMatchData a in instance.aliveBots) { a.AddMatch(MatchResult.VICTORY); }
-                foreach (PlayerMatchData d in instance.deadBots) { d.AddMatch(MatchResult.LOSS); }
-                instance.matchInProgress = false;
-                SceneManager.LoadScene(SCENE_TO_LOAD); //TODO: Make it so that it loads after X seconds (coroutine?)
+                foreach (PlayerMatchData a in aliveBots) { a.AddMatch(MatchResult.VICTORY); }
+                foreach (PlayerMatchData d in deadBots) { d.AddMatch(MatchResult.LOSS); }
+                matchInProgress = false;
+                MatchEnd();
             }
-            if(Instance().aliveBots.Count == 0) {
+            if(aliveBots.Count == 0) {
                 //It's a tie!
-                foreach (PlayerMatchData d in instance.deadBots) { d.AddMatch(MatchResult.DRAW); }
-                instance.matchInProgress = false;
-                SceneManager.LoadScene(SCENE_TO_LOAD);
+                foreach (PlayerMatchData d in aliveBotsLastTurn) { d.AddMatch(MatchResult.DRAW); }
+                MatchEnd();
             }
         }
 
-        static void NewRound() {
-            InstantiateRobots();
-
-            Instance().round++;
-            Instance().matchInProgress = true;
+        void MatchEnd() {
+            matchInProgress = false;
+        	Invoke("NewRound", SECONDS_BEFORE_NEW_ROUND);
         }
 
-        static void InstantiateRobots() {
+        void NewRound() {
+            if(round < GameConfig.instance.rounds) {
+                DestroyAliveBots();
+                InstantiateRobots();
+                TurnManager.ResetTurns();
+                matchInProgress = true;
+                round++;
+                Debug.Log(string.Format("Round {0} started!", round));
+            } else {
+                Debug.Log("Game ended!");
+            }
+        }
+
+        void DestroyAliveBots(){
+            foreach (PlayerMatchData playerMatchData in aliveBots){
+                Destroy(playerMatchData.controller.gameObject);
+            }
+        }
+
+        void InstantiateRobots() {
             foreach (PlayerMatchData playerMatchData in DataManager.GetRobotsMatchData()) {
                 Vector3 randomPosition = RandomUtil.RandomPositionInsideMap();
                 Vector3 randomRotation = RandomUtil.RandomRotationHorizontal();

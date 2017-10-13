@@ -1,24 +1,26 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 namespace BotArena { 
-    internal class MatchTextGUIController : MonoBehaviour {
+    class MatchTextGUIController : MonoBehaviour {
 
-        new Text guiText;
+        Text matchGUIText;
+        MatchManager matchManager;
 
         void Start () {
-            //MatchText only changes when a match ends, so we only need to set it at start
-            guiText = GetComponent<Text>();
-            guiText.text = GetMatchText();
+            matchManager = FindObjectOfType<MatchManager>();
+            matchGUIText = GetComponent<Text>();
         }
 
-        private string GetMatchText() {
+        void FixedUpdate(){
+            matchGUIText.text = GetMatchText();
+        }
+
+        string GetMatchText() {
             string res = "";
             DataManager.GetRobotsMatchData().ForEach( d =>
                 res += d.ToString() + "\n");
-            res += string.Format("Round: {0}", MatchManager.Instance().round);
+            res += string.Format("Round: {0}", matchManager.round);
             return res;
         }
     }

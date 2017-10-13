@@ -3,17 +3,18 @@ using UnityEngine;
 
 namespace BotArena {
     [System.Serializable]
-    internal class GameConfig {
+    class GameConfig {
 
-        private static GameConfig instance;
+        static GameConfig _instance;
 
-        public static GameConfig Instance() {
-            if (instance == null) {
-                Debug.Log("Creating GameConfig instance");
-                instance = DataLoader.LoadGameConfig();
+        public static GameConfig instance {
+            get {
+                if (_instance == null) {
+                    Debug.Log("Creating GameConfig instance");
+                    _instance = DataLoader.LoadGameConfig();
+                }
+                return _instance;
             }
-
-            return instance;
         }
 
         public List<PlayerConfig> robots = new List<PlayerConfig>();

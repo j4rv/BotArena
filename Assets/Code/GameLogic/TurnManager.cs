@@ -14,11 +14,9 @@ namespace BotArena
 
         static TurnManager instance;
 
-        static TurnManager Get() {
-            if (instance == null) {
-                instance = (TurnManager)FindObjectOfType(typeof(TurnManager));
-            }
-            return instance;
+
+        void Awake(){
+            instance = (TurnManager)FindObjectOfType(typeof(TurnManager));
         }
 
         void FixedUpdate() {
@@ -28,12 +26,17 @@ namespace BotArena
             timeSteps++;
         }
 
+
+        public static void ResetTurns() {
+            instance.currentTurn = 0;
+        }
+
         public static int GetCurrentTurn() {
-            return Get().currentTurn;
+            return instance.currentTurn;
         }
 
         public static bool IsTurnUpdate() {
-            return Get().timeSteps % TIMESTEPS_PER_TURN == 0;
+            return instance.timeSteps % TIMESTEPS_PER_TURN == 0;
         }
     }
 }

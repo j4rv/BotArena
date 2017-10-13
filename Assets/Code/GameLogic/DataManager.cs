@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace BotArena { 
@@ -6,9 +7,17 @@ namespace BotArena {
     {
         static readonly string ROBOTS_PATH = @"./Libraries/";
 
-		static DataManager instance;
+        static DataManager _instance;
+        static DataManager instance {
+            get {
+                if (_instance == null) {
+                    Init();
+                }
+                return _instance;
+            }
+        }
 
-		readonly GameConfig gameConfig;
+        readonly GameConfig gameConfig;
         readonly List<PlayerMatchData> robotsMatchData;
 
 		/**
@@ -16,14 +25,14 @@ namespace BotArena {
 		 */
         DataManager(List<PlayerMatchData> robotsMatchData){
 			this.robotsMatchData = robotsMatchData;
-			this.gameConfig = GameConfig.Instance();
+			this.gameConfig = GameConfig.instance;
 		}
 
 		public static void Init(){
-			if (instance == null) {
+			if (_instance == null) {
 				List<PlayerMatchData> matchData = new List<PlayerMatchData>();
-				instance = new DataManager(matchData);
-				GameConfig config = instance.gameConfig;
+				_instance = new DataManager(matchData);
+				GameConfig config = _instance.gameConfig;
 
 				Time.timeScale = config.gameSpeed;
 				Debug.Log(JsonUtility.ToJson(config));
@@ -42,18 +51,13 @@ namespace BotArena {
 						Debug.Log("Added null robot from player '" + playerConfig.playerNickname + "'. Did you provide a valid dll file path?");
 					}
 				}
-			}
-		}
-
-        static DataManager GetInstance () {
-            if (instance == null) {
-					Init();
-			}
-			return instance;
-        }       
+            } else {
+                throw new Exception("DataManager has an instance initialized already!");
+            }
+		}      
 	
 		public static List<PlayerMatchData> GetRobotsMatchData() {
-			return GetInstance().robotsMatchData;
+			return instance.robotsMatchData;
 		}
     }
 }
