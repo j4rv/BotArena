@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -26,20 +26,20 @@ namespace BotArena {
 
                 r1.filename = "DefaultBots.dll";
                 r1.robotToLoad = "(RANDOM)";
-                r1.playerNickname = "Default bot 1";
+                r1.nickname = "Default bot 1";
                 r2.filename = "DefaultBots.dll";
                 r2.robotToLoad = "(RANDOM)";
-                r2.playerNickname = "Default bot 2";
-                gameConfig.robots = new List<GameConfig.PlayerConfig>();
-                gameConfig.robots.Add(r1);
-                gameConfig.robots.Add(r2);
+                r2.nickname = "Default bot 2";
+                gameConfig.players = new List<GameConfig.PlayerConfig>();
+                gameConfig.players.Add(r1);
+                gameConfig.players.Add(r2);
 
                 StreamWriter gameConfigFile = File.CreateText(CONFIG_PATH);
-                gameConfigFile.WriteLine(JsonUtility.ToJson(gameConfig));
+                gameConfigFile.WriteLine(gameConfig.Serialize());
                 gameConfigFile.Close();
 
                 Debug.Log(CREATED);
-                Debug.Log(JsonUtility.ToJson(gameConfig));
+                Debug.Log(gameConfig.Serialize());
 
                 return gameConfig;
             }

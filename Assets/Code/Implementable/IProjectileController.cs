@@ -8,6 +8,7 @@ namespace BotArena
         static readonly float MAXIMUM_DAMAGE = 80; //Let's limit one hit kills
 
         protected IWeaponController weapon;
+        protected bool hasHitted;
 
         public void SetWeapon(IWeaponController weapon) {
             if (weapon == null) {
@@ -21,14 +22,16 @@ namespace BotArena
         public virtual void RobotHit(RobotController hit, float impactVelocity) {
             float damage = Mathf.Clamp(impactVelocity * GetDamage(), MINIMUM_DAMAGE, MAXIMUM_DAMAGE);
             hit.TakeDamage(damage);
+            Debug.Log(string.Format("Dealing {0} damage to {1}.", damage, hit.robot.GetName()));
         }
 
         void OnCollisionEnter(Collision collision) {
-            if (collision.transform.tag == Tags.ROBOT) {
+            if (!hasHitted && collision.transform.tag == Tags.ROBOT) {
                 RobotController robot = collision.gameObject.GetComponent<RobotController>();
                 RobotHit(robot, collision.relativeVelocity.magnitude);
             }
             OnHit();
+            hasHitted = true;
         }
 
     }

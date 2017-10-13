@@ -17,20 +17,27 @@ namespace BotArena {
             }
         }
 
-        public List<PlayerConfig> robots = new List<PlayerConfig>();
+        // Match properties
+        public List<PlayerConfig> players = new List<PlayerConfig>();
         public int rounds = 10;
-        public float gameSpeed = 1;
+
+        // Game properties
+        public float gameSpeed =                1;
+        public int timestepsPerTurn =           2;
+        public float lostTurnPenalty =          5;
+        public int turnLimit =                  500;
+        public float damagePerTurnAfterLimit =  0.5f;
 
         [System.Serializable]
         public class PlayerConfig
         {
+            public string nickname;
             public string filename;
-            public string playerNickname;
             public string robotToLoad = "(RANDOM)";
         }
 
-        public string ToJson() {
-            return JsonUtility.ToJson(this);
+        public string Serialize() {
+            return JsonUtility.ToJson(this, true);
         }
 
     }

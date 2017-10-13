@@ -19,6 +19,8 @@ namespace BotArena
         public float health;
         public float energy;
 
+        static readonly float TURN_LOST_PENALTY = GameConfig.instance.lostTurnPenalty;
+
         public void Init(IRobot robot) {
             this.robot = robot;
             health = robot.maxHealth;
@@ -148,7 +150,7 @@ namespace BotArena
             bool turnLost = !robot.StartTurn(robotThreadSharedData);
 
 			if (turnLost) {
-				TakeDamage(5);
+              	TakeDamage(TURN_LOST_PENALTY);
 			}
         }
 

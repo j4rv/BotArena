@@ -5,7 +5,7 @@ namespace BotArena
     class TurnManager : MonoBehaviour
     {
         //A turn every two timesteps, TODO: Make it configurable
-        static readonly int TIMESTEPS_PER_TURN = 2;
+        static readonly int TIMESTEPS_PER_TURN = GameConfig.instance.timestepsPerTurn;
 
         [SerializeField]
         long timeSteps;

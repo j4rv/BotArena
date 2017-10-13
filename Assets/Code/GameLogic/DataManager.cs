@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -35,20 +35,20 @@ namespace BotArena {
 				GameConfig config = _instance.gameConfig;
 
 				Time.timeScale = config.gameSpeed;
-				Debug.Log(JsonUtility.ToJson(config));
+                Debug.Log(config.Serialize());
 				Debug.Log("Setting time scale to: " + config.gameSpeed);
 				
 				//Instantiating players and their robots
-				foreach (GameConfig.PlayerConfig playerConfig in config.robots) {
+				foreach (GameConfig.PlayerConfig playerConfig in config.players) {
 					string robotLibrary = ROBOTS_PATH + playerConfig.filename;
 					IRobot robot = DllUtil.CreateRobotFromDll(robotLibrary, playerConfig.robotToLoad);
-					PlayerMatchData playerMatchData = new PlayerMatchData(playerConfig.playerNickname, robot, null);
+					PlayerMatchData playerMatchData = new PlayerMatchData(playerConfig.nickname, robot, null);
 					matchData.Add(playerMatchData);
 
 					if (robot != null) {
-						Debug.Log("Added robot '" + robot.GetName() + "' from player '" + playerConfig.playerNickname + "'");
+						Debug.Log("Added robot '" + robot.GetName() + "' from player '" + playerConfig.nickname + "'");
 					} else {
-						Debug.Log("Added null robot from player '" + playerConfig.playerNickname + "'. Did you provide a valid dll file path?");
+						Debug.Log("Added null robot from player '" + playerConfig.nickname + "'. Did you provide a valid dll file path?");
 					}
 				}
             } else {

@@ -4,8 +4,8 @@ using UnityEngine;
 namespace BotArena
 {
     class MatchManager : MonoBehaviour {
-        static readonly int TURN_LIMIT = 500;                      //TODO Make it configurable
-        static readonly float DAMAGE_PER_TURN_AFTER_LIMIT = 0.5f;  //TODO Make it configurable
+        static readonly int TURN_LIMIT = GameConfig.instance.turnLimit;
+        static readonly float DAMAGE_PER_TURN_AFTER_LIMIT = GameConfig.instance.damagePerTurnAfterLimit;
         static readonly float SECONDS_BEFORE_NEW_ROUND = 2;        //TODO Make it configurable
 
         HashSet<PlayerMatchData> aliveBotsLastTurn;
