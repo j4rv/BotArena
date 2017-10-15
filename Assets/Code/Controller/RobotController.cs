@@ -182,6 +182,8 @@ namespace BotArena
         Collision wallHit;
         void CheckWallHit() {
             if (wallHit != null) {
+                ContactPoint contactPoint = wallHit.contacts[0];
+                ParticleEffectFactory.Summon("StarsHit", 1, contactPoint.point, Quaternion.LookRotation(contactPoint.normal));
                 WallHitEvent e = new WallHitEvent(wallHit);
                 robotThreadSharedData.events.Add(e);
             }

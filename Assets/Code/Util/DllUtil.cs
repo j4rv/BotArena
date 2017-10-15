@@ -20,7 +20,7 @@ namespace BotArena {
                 }
                 return CreateSpecificRobotFromDll(dllPath, robotToLoad);
             } catch (Exception e) {
-                Debug.Log(e.Message);
+                Debug.Log("Exception while trying to create a bot from: " + dllPath + "\n" + e.Message);
                 return null;
             }
         }
@@ -32,7 +32,7 @@ namespace BotArena {
                     return (IRobot)Activator.CreateInstance(type, new object[] { });
                 }
             }
-            throw new ArgumentException("Cannot find any robot classes named \"" + dllPath + "\" at \"" + dllPath + "\" library.");
+            throw new ArgumentException("Cannot find any robot classes named \"" + dllPath + "\" at the \"" + dllPath + "\" library.");
         }
 
         static IRobot CreateFirstRobotFromDll(string dllPath) {
@@ -55,7 +55,7 @@ namespace BotArena {
 
         ///Learning some Linq!
         ///http://stackoverflow.com/questions/3353699/using-reflection-to-get-all-classes-of-certain-base-type-in-dll
-        static IList<Type> GetTypes<T>(String dllPath) {
+        static IList<Type> GetTypes<T>(string dllPath) {
             Assembly dll = Assembly.LoadFile(@dllPath);
             return (from t in dll.GetTypes()
                     where t.IsSubclassOf(typeof(T))

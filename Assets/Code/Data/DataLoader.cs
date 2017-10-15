@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -12,11 +11,11 @@ namespace BotArena {
 
         public static GameConfig LoadGameConfig() {
             if (File.Exists(CONFIG_PATH)) {
-                Debug.Log(LOADED);
                 StreamReader reader = new StreamReader(CONFIG_PATH);
                 string jsonString = reader.ReadToEnd();
                 reader.Close();
 
+                Debug.Log(LOADED);
                 return JsonUtility.FromJson<GameConfig>(jsonString);
             }
             else {
@@ -39,8 +38,6 @@ namespace BotArena {
                 gameConfigFile.Close();
 
                 Debug.Log(CREATED);
-                Debug.Log(gameConfig.Serialize());
-
                 return gameConfig;
             }
         }

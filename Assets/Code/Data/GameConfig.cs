@@ -10,7 +10,6 @@ namespace BotArena {
         public static GameConfig instance {
             get {
                 if (_instance == null) {
-                    Debug.Log("Creating GameConfig instance");
                     _instance = DataLoader.LoadGameConfig();
                 }
                 return _instance;

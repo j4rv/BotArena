@@ -1,9 +1,7 @@
 ﻿using UnityEngine;
 namespace BotArena {
     public class Explosion : TemporaryParticleSystem {
-
-        public Light flash;
-
+        
         public float shakeDuration = 1.5f;
         public float shakeAmount = 0.1f;
         public float decreaseFactor = 1.0f;
@@ -26,8 +24,6 @@
             base.Update();
             if (shakeDuration > 0) {
                 cameraToShake.localPosition = originalPos + Random.insideUnitSphere * shakeAmount * shakeDuration;
-
-                flash.intensity -= Time.deltaTime * 10;
                 shakeDuration -= Time.deltaTime * decreaseFactor;
             }
         }
