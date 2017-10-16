@@ -48,11 +48,11 @@ namespace BotArena {
                         robot.player = playerConfig.nickname;
 						Debug.Log("Added robot '" + robot.name + "' from player '" + playerConfig.nickname + "'");
 					} else {
-						Debug.Log("Added null robot from player '" + playerConfig.nickname + "'. Did you provide a valid dll file path?");
+                        Debug.LogError("Added null robot from player '" + playerConfig.nickname + "'. Did you provide a valid dll file path?");
 					}
 				}
             } else {
-                throw new Exception("DataManager has an instance initialized already!");
+                Debug.LogError("Tried to create a second DataManager!");
             }
 		}      
 	

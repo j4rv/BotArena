@@ -22,7 +22,7 @@ namespace BotArena
         public virtual void RobotHit(RobotController hit, float impactVelocity) {
             float damage = Mathf.Clamp(impactVelocity * GetDamage(), MINIMUM_DAMAGE, MAXIMUM_DAMAGE);
             hit.TakeDamage(damage);
-            Debug.Log(string.Format("Dealing {0} damage to {1}.", damage, hit.robot.name));
+            // Debug.Log(string.Format("Dealing {0} damage to {1}.", damage, hit.robot.name));
         }
 
         void OnCollisionEnter(Collision collision) {

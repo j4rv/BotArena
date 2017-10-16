@@ -25,7 +25,8 @@ namespace BotArena
 		/// Move the robot forward/backwards.
 		/// </summary>
         protected override void Execute() {
-            robotController.GetComponent<Rigidbody>().velocity = robotController.transform.forward * speed;
+            robotController.GetComponent<Rigidbody>().velocity = 
+                robotController.transform.forward * speed * 2f / TurnManager.GetTimeStepsPerTurn();
             robotController.ConsumeEnergy(GetEnergyCost());
         }
 

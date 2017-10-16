@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace BotArena
@@ -51,7 +51,7 @@ namespace BotArena
                         robotController.TakeDamage(DAMAGE_PER_TURN_AFTER_LIMIT);
                     }
 
-                    robotController.TurnUpdate();
+                    robotController.ExecuteTurn();
 
                     if (robotController.IsAlive()) {
                         aliveBots.Add(playerMatchData);

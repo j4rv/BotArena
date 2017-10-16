@@ -31,6 +31,10 @@ namespace BotArena
             instance.currentTurn = 0;
         }
 
+        public static int GetTimeStepsPerTurn(){
+            return TIMESTEPS_PER_TURN;
+        }
+
         public static int GetCurrentTurn() {
             return instance.currentTurn;
         }

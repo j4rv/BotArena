@@ -66,6 +66,13 @@ namespace BotArena
             }
         }
 
+        void UpdateRobotInfo() {
+        	Vector3 pos = transform.position;
+        	Vector3 rot = transform.rotation.eulerAngles;
+        	Vector3 gunRot = weapon.transform.rotation.eulerAngles;
+        	robot.UpdateInfo(health, energy, pos, rot, gunRot);
+        }
+
         readonly Dictionary<Command, int> commandToTurn = new Dictionary<Command, int>();
         public int GetLastTurnExecuted(Command cmd) {
             int result;
@@ -74,48 +81,42 @@ namespace BotArena
         }
 
 		/// <summary>
-		/// Finds all robot instances, except this robotController.
+		/// Finds all alive robot instances, except this robotController.
 		/// </summary>
-        void FindEnemies() {
+        LinkedList<RobotController> FindAliveEnemies() {
+            LinkedList<RobotController> robots = new LinkedList<RobotController>(FindObjectsOfType<RobotController>());
+            robots.Remove(this);
+            return robots;
+        }
+
+        void UpdateEnemies(){
             HashSet<RobotInfo> res = new HashSet<RobotInfo>();
-            GameObject[] robots = GameObject.FindGameObjectsWithTag(Tags.ROBOT);
-
-            foreach (GameObject r in robots) {
-				if (r != gameObject){
-                	res.Add(r.GetComponent<RobotController>().robot.info);
-				}
+            foreach (RobotController r in FindAliveEnemies()){
+                res.Add(r.robot.info);
             }
-
-			robot.SetEnemies(res);
+            robot.SetEnemies(res);
         }
 
         //              TURN METHODS
 
-        internal void TurnUpdate() {
+        internal void ExecuteTurn() {
             if (IsAlive()) {
-                TurnUpdateStats();
+                RecoverStats();
                 UpdateRobotInfo();
                 ExecuteLastOrder();
 
                 CreateOrderForNextTurn();
                 NewTurnEventChecks();
-				FindEnemies();
+                UpdateEnemies();
                 RunNewTurnOnRobotThread();
             } else {
-                CheckDeath();
+                Death();
             }
         }
 
-        void TurnUpdateStats() {
+        void RecoverStats() {
             energy = Mathf.Clamp(energy + robot.energyRecoveryRate, 0, robot.maxEnergy);    //Recover some energy
             // TODO: Heal a bit over time? Stop healing for x turns after receiving damage?
-        }
-
-        void UpdateRobotInfo() {
-            Vector3 pos = transform.position;
-            Vector3 rot = transform.rotation.eulerAngles;
-            Vector3 gunRot = weapon.transform.rotation.eulerAngles;
-            robot.UpdateInfo(health, energy, GetAgility(), pos, rot, gunRot);
         }
 
         void ExecuteLastOrder() {
@@ -155,7 +156,11 @@ namespace BotArena
         }
 
 
-        //              EVENT CHECKERS
+        //              EVENTS
+
+        internal void AddEvent(IEvent e){
+            robotThreadSharedData.events.Add(e);
+        }
 
         void NewTurnEventChecks() {
             //Clear the previous turn's events and collisions
@@ -174,7 +179,7 @@ namespace BotArena
                     RobotController hitRobotController = hit.transform.GetComponent<RobotController>();
                     RobotInfo enemyInfo = hitRobotController.robot.info;
                     RobotDetectedEvent e = new RobotDetectedEvent(enemyInfo);
-                    robotThreadSharedData.events.Add(e);
+                    AddEvent(e);
                 }
             }
         }
@@ -185,17 +190,20 @@ namespace BotArena
                 ContactPoint contactPoint = wallHit.contacts[0];
                 ParticleEffectFactory.Summon("StarsHit", 1, contactPoint.point, Quaternion.LookRotation(contactPoint.normal));
                 WallHitEvent e = new WallHitEvent(wallHit);
-                robotThreadSharedData.events.Add(e);
+                AddEvent(e);
             }
 
             wallHit = null;
         }
 
-        void CheckDeath() {
-            DeathEvent death = new DeathEvent(robot);
-            robotThreadSharedData.events.Add(death);
+        void Death() {
             UpdateRobotInfo();
-            //TODO: Add some kind of visuals
+            robot.OnDeath(robot);
+            DeathEvent death = new DeathEvent(robot);
+            foreach(RobotController otherRobot in FindAliveEnemies()){
+                otherRobot.AddEvent(death);
+            }
+
             ParticleEffectFactory.Summon("Explosion", 1.5f, transform.position, transform.rotation);
             Destroy(gameObject);
         }
