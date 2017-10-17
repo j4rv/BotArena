@@ -2,8 +2,8 @@
 namespace BotArena {
     public class Explosion : TemporaryParticleSystem {
         
-        public float shakeDuration = 1.5f;
-        public float shakeAmount = 0.1f;
+        public float shakeDuration = 1.0f;
+        public float shakeAmount = 0.2f;
         public float decreaseFactor = 1.0f;
 
         Transform cameraToShake;
@@ -13,8 +13,9 @@
             mainParticleSystem = GetComponent<ParticleSystem>();
         }
 
-        void OnEnable() {
+        void Start() {
             // TODO add flash effect?
+            SoundManager.Play(transform.position, "explosion", 1);
             cameraToShake = GameObject.Find("Main Camera").transform;
             originalPos = cameraToShake.localPosition;
             shakeDuration = transform.localScale.x;

@@ -60,7 +60,12 @@ namespace BotArena
             return robot.agility;
         }
 
+        internal void ChangeHealth(float change){
+            health += change;
+        }
+
         internal void TakeDamage(float damage) {
+            SoundManager.Play(transform.position, "hit", 1);
             if (damage >= 0) {
                 health -= damage;
             }
@@ -151,7 +156,8 @@ namespace BotArena
             bool turnLost = !robot.StartTurn(robotThreadSharedData);
 
 			if (turnLost) {
-              	TakeDamage(TURN_LOST_PENALTY);
+                ChangeHealth(-TURN_LOST_PENALTY);
+                SoundManager.Play(transform.position, "penalty", 1);
 			}
         }
 
@@ -188,6 +194,7 @@ namespace BotArena
         void CheckWallHit() {
             if (wallHit != null) {
                 ContactPoint contactPoint = wallHit.contacts[0];
+                SoundManager.Play(transform.position, "blop", 1);
                 ParticleEffectFactory.Summon("StarsHit", 1, contactPoint.point, Quaternion.LookRotation(contactPoint.normal));
                 WallHitEvent e = new WallHitEvent(wallHit);
                 AddEvent(e);
@@ -204,7 +211,8 @@ namespace BotArena
                 otherRobot.AddEvent(death);
             }
 
-            ParticleEffectFactory.Summon("Explosion", 1.5f, transform.position, transform.rotation);
+            SoundManager.Play(transform.position, "explosion", 2f);
+            ParticleEffectFactory.Summon("Explosion", 1.8f, transform.position, transform.rotation);
             Destroy(gameObject);
         }
 

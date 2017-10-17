@@ -6,7 +6,7 @@ namespace BotArena {
         void OnCollisionEnter(Collision collision) {
             if (collision.transform.tag == Tags.ROBOT) {
                 // TODO This should get replaced with a Destroy function.
-                collision.transform.GetComponent<RobotController>().TakeDamage(10000);
+                collision.transform.GetComponent<RobotController>().ChangeHealth(-10000);
             } else {
                 Destroy(collision.gameObject);
             }

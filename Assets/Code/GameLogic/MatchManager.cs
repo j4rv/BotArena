@@ -48,7 +48,7 @@ namespace BotArena
 
                 if (robotController) {
                     if (TurnManager.GetCurrentTurn() > TURN_LIMIT) {
-                        robotController.TakeDamage(DAMAGE_PER_TURN_AFTER_LIMIT);
+                        robotController.ChangeHealth(-DAMAGE_PER_TURN_AFTER_LIMIT);
                     }
 
                     robotController.ExecuteTurn();
@@ -71,12 +71,14 @@ namespace BotArena
                 //One robot lives, that robot wins!
                 foreach (PlayerMatchData a in aliveBots) { a.AddMatch(MatchResult.VICTORY); }
                 foreach (PlayerMatchData d in deadBots) { d.AddMatch(MatchResult.LOSS); }
+                SoundManager.Play("victory", 0.75f);
                 matchInProgress = false;
                 MatchEnd();
             }
             if(aliveBots.Count == 0) {
                 //It's a tie!
                 foreach (PlayerMatchData d in aliveBotsLastTurn) { d.AddMatch(MatchResult.DRAW); }
+                SoundManager.Play("tie", 0.75f);
                 MatchEnd();
             }
         }
