@@ -11,4 +11,6 @@ Your robot will battle against other robots, programmed by other players or by y
 
 **[Check the wiki](https://github.com/J4RV/BotArena/wiki) to learn how to code your own robot and how to configure the game.**
 
-![BotArena 1.0](https://i.imgur.com/qilRuah.gif)
+<p align="center">
+  <img src="https://i.imgur.com/qilRuah.gif" alt="BotArena gameplay gif"/>
+</p>
