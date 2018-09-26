@@ -25,7 +25,7 @@ namespace BotArena {
         }
 
         public static void Play(Vector3 position, string id, float volume){
-            Play(position, id, volume, 1f);
+            Play(position, id, volume, 0.8f);
         }
 
         public static void Play(Vector3 position, string id, float volume, float spatialBlend) {

@@ -10,7 +10,7 @@ namespace BotArena
         protected RandomUtil(){}
 
         public static uint RandomSeed(){
-            return (uint)(random.Next(1 << 30)) << 2 | (uint)(random.Next(1 << 2));
+            return (uint)(rand.Next(1 << 30)) << 2 | (uint)(rand.Next(1 << 2));
         }
 
         public static Vector3 RandomPositionInsideMap() {

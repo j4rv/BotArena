@@ -16,7 +16,7 @@ namespace BotArena
         }
 
         public override int GetCooldown() {
-            return 20;
+            return 40;
         }
 
         public override float GetStaminaCost() {

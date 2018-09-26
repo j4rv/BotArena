@@ -212,7 +212,7 @@ namespace BotArena
             }
 
             SoundManager.Play(transform.position, "explosion", 2f);
-            ParticleEffectFactory.Summon("Explosion", 1.8f, transform.position, transform.rotation);
+            ParticleEffectFactory.Summon("Explosion", 3f, transform.position, transform.rotation);
             Destroy(gameObject);
         }
 
