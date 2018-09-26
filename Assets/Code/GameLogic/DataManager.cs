@@ -5,7 +5,9 @@ using UnityEngine;
 namespace BotArena { 
     class DataManager 
     {
-        static readonly string ROBOTS_PATH = @"./Libraries/";
+        
+        //public static readonly string ROBOTS_PATH = @"./Bots/";
+		public static readonly string ROBOTS_PATH = @"./Libraries/";
 
         static DataManager _instance;
         static DataManager instance {
