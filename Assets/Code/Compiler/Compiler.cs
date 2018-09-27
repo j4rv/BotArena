@@ -7,6 +7,7 @@ using System.Reflection;
 using TMPro;
 using UnityEngine;
 
+namespace BotArena { 
 public class Compiler<T> {
 
   private readonly List<String> errors;
@@ -16,11 +17,22 @@ public class Compiler<T> {
   private readonly string MORE_THAN_ONE_CLASS_IN_SOURCE_ERROR = $"Found more than one class of type {typeof(T)} in source code, this is not allowed";
   private readonly string NO_CLASS_IN_SOURCE_ERROR = $"No exported class of type {typeof(T)} in source code";
 
+  public Compiler() {
+    errors = new List<String>();
+    this.csProvider = new CSharpCodeProvider();
+  }
+
   public Compiler(TextMeshProUGUI errorsContainer) {
     errors = new List<String>();
     this.errorsContainer = errorsContainer;
     this.csProvider = new CSharpCodeProvider();
   }
+
+  public T compileAndCreateFromFilename(string robotFilename){
+    Debug.Log("Compiling robot " + robotFilename);
+    string sourceCode = SourceFiles.Open(robotFilename);
+    return compileAndCreateInstance(sourceCode);
+	}
 
   public T compileAndCreateInstance(string source){
     errors.Clear();
@@ -83,7 +95,10 @@ public class Compiler<T> {
   }
 
   private void updateErrorsUI() {
-    errorsContainer.text = String.Join("\n", errors);
+    if(errorsContainer != null){
+      errorsContainer.text = String.Join("\n", errors);
+    }
   }
 
+}
 }

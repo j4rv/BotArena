@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
-namespace BotArena {
+
+namespace BotArena {
     public class Explosion : TemporaryParticleSystem {
         
         public float shakeDuration = 1.0f;

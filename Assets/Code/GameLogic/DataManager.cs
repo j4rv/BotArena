@@ -6,8 +6,7 @@ namespace BotArena {
     class DataManager 
     {
         
-        //public static readonly string ROBOTS_PATH = @"./Bots/";
-		public static readonly string ROBOTS_PATH = @"./Libraries/";
+        public static readonly string ROBOTS_PATH = @"./Bots/";
 
         static DataManager _instance;
         static DataManager instance {
@@ -41,8 +40,7 @@ namespace BotArena {
 				
 				//Instantiating players and their robots
 				foreach (GameConfig.PlayerConfig playerConfig in config.players) {
-					string robotLibrary = ROBOTS_PATH + playerConfig.filename;
-					IRobot robot = DllUtil.CreateRobotFromDll(robotLibrary, playerConfig.robotToLoad);
+					IRobot robot = RobotFactory.Create(playerConfig.filename);
 					PlayerMatchData playerMatchData = new PlayerMatchData(playerConfig.nickname, robot, null);
 					matchData.Add(playerMatchData);
 

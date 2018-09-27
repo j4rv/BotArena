@@ -14,7 +14,6 @@ namespace BotArena {
 
 		void Start () {
 			compiler = new Compiler<IRobot>(errors);
-			CompileAndRun();
 		}
 		
 		void Update () {

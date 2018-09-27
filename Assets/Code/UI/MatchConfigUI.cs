@@ -10,16 +10,16 @@ namespace BotArena {
 
 		[SerializeField] private Slider botsAmount;
 		[SerializeField] private TMP_Dropdown robotSelectorPrefab;
+		[SerializeField] private TMP_Text robotSelectorAmount;
 		[SerializeField] private GameObject dropdownsParent;
 
 		private TMP_Dropdown[] robotSelectors;
 
-		// Use this for initialization
 		void Start () {
 			robotSelectors = new TMP_Dropdown[Constants.MAX_BOTS_PER_MATCH];
 			for(int i = 0; i < Constants.MAX_BOTS_PER_MATCH; i++){
 				TMP_Dropdown aRobotSelector = Instantiate(robotSelectorPrefab);
-				aRobotSelector.transform.SetParent(dropdownsParent.transform);
+				aRobotSelector.transform.SetParent(dropdownsParent.transform, false);
 				robotSelectors[i] = aRobotSelector;
 			}
 			UpdateDropdownsParent();
@@ -35,6 +35,7 @@ namespace BotArena {
 				bool enableSelector = i < botsAmount.value;
 				robotSelectors[i].gameObject.SetActive(enableSelector);
 			}
+			robotSelectorAmount.text = botsAmount.value.ToString();
 		}
 
 	}
