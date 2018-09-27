@@ -1,9 +1,8 @@
 ﻿using BotArena;
+using UnityEngine;
 
-namespace DefaultBots
-{
-    public class Searcher : ITank
-    {
+namespace DefaultBots {
+    public class Searcher : ITank{
         public Searcher() {
             name = "Searcher";
         }
@@ -23,6 +22,5 @@ namespace DefaultBots
 				order.AddCommand(Command.ATTACK, power);
 			}
 		}
-
     }
 }

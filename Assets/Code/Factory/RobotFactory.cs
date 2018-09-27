@@ -8,7 +8,7 @@ namespace BotArena
         private static readonly Compiler<IRobot> compiler = new Compiler<IRobot>();
 
         public static IRobot Create(string robotFilename) {
-            return compiler.compileAndCreateFromFilename(robotFilename);
+            return compiler.CompileAndCreateFromFilename(robotFilename);
         }
 
     }

@@ -27,12 +27,12 @@ namespace BotArena {
 
 		void CompileAndRun() {
 			string sourceCode = input.text;
-			IRobot robot = compiler.compileAndCreateInstance(sourceCode);
+			IRobot robot = compiler.CompileAndCreateInstance(sourceCode);
 		}
 
 		void Save() {
 			string sourceCode = input.text;
-			IRobot robot = compiler.compileAndCreateInstance(sourceCode);
+			IRobot robot = compiler.CompileAndCreateInstance(sourceCode);
 			if(robot != null){
 				SourceFiles.Save(robot.name + ".cs", sourceCode);
 			}

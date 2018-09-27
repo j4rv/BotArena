@@ -28,28 +28,28 @@ public class Compiler<T> {
     this.csProvider = new CSharpCodeProvider();
   }
 
-  public T compileAndCreateFromFilename(string robotFilename){
+  public T CompileAndCreateFromFilename(string robotFilename){
     Debug.Log("Compiling robot " + robotFilename);
     string sourceCode = SourceFiles.Open(robotFilename);
-    return compileAndCreateInstance(sourceCode);
+    return CompileAndCreateInstance(sourceCode);
 	}
 
-  public T compileAndCreateInstance(string source){
+  public T CompileAndCreateInstance(string source){
     errors.Clear();
 
-    var compilerResults = compileCSharpCode(source);
-		T processedResult = processCompilerResults(compilerResults);
+    var compilerResults = CompileCSharpCode(source);
+		T processedResult = ProcessCompilerResults(compilerResults);
 
     if(processedResult == null){
       errors.Add(NO_CLASS_IN_SOURCE_ERROR);
-      updateErrorsUI();
+      UpdateErrorsUI();
       throw new CompilationException(NO_CLASS_IN_SOURCE_ERROR, source);
     } else {
       return processedResult;
     }    
 	}
 
-  private CompilerResults compileCSharpCode(string source){
+  private CompilerResults CompileCSharpCode(string source){
     var compParams = new CompilerParameters{
       GenerateExecutable = false, 
       GenerateInMemory = true
@@ -63,7 +63,7 @@ public class Compiler<T> {
 		return csProvider.CompileAssemblyFromSource(compParams, source);
   }
 
-  private T processCompilerResults(CompilerResults compilerResults){
+  private T ProcessCompilerResults(CompilerResults compilerResults){
     T result = NULL_T;
     if(compilerResults.Errors.HasErrors){
 			foreach(CompilerError err in compilerResults.Errors){
@@ -71,17 +71,17 @@ public class Compiler<T> {
 			}
 		} else {
       try {
-        result = createInstanceFromCompilerResults(compilerResults);
+        result = CreateInstanceFromCompilerResults(compilerResults);
       } catch (Exception e) {
         errors.Add(e.ToString());
       } finally {
-        updateErrorsUI();
+        UpdateErrorsUI();
       }
     }
     return result;
   }
 
-  private T createInstanceFromCompilerResults(CompilerResults compilerResults) {
+  private T CreateInstanceFromCompilerResults(CompilerResults compilerResults) {
     T instance = NULL_T;
     foreach (Type type in compilerResults.CompiledAssembly.GetExportedTypes()){
       if(typeof(T).IsAssignableFrom(type)){
@@ -94,7 +94,7 @@ public class Compiler<T> {
     return instance;
   }
 
-  private void updateErrorsUI() {
+  private void UpdateErrorsUI() {
     if(errorsContainer != null){
       errorsContainer.text = String.Join("\n", errors);
     }

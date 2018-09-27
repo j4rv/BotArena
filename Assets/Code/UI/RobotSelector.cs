@@ -6,16 +6,16 @@ using TMPro;
 namespace BotArena { 
 	public class RobotSelector : MonoBehaviour {
 
-		[SerializeField] private TMP_Dropdown robotSelectorPrefab;
+		private TMP_Dropdown dropdown;
 
 		void Start () {
-			robotSelectorPrefab = gameObject.GetComponent(typeof(TMP_Dropdown)) as TMP_Dropdown;
+			dropdown = gameObject.GetComponent(typeof(TMP_Dropdown)) as TMP_Dropdown;
 			foreach (var robotName in SourceFiles.FileNames()){
 				var oneOption = new TMP_Dropdown.OptionData();
 				oneOption.text = robotName;
-				robotSelectorPrefab.options.Add(oneOption);				
+				dropdown.options.Add(oneOption);				
 			}
-			robotSelectorPrefab.RefreshShownValue();
+			dropdown.RefreshShownValue();
 		}
 		
 	}
