@@ -11,17 +11,17 @@ namespace BotArena {
 	public class MatchConfigUI : MonoBehaviour {
 
 		[SerializeField] private Slider botsAmount;
-		[SerializeField] private TMP_Dropdown robotSelectorPrefab;
+		[SerializeField] private RobotSelector robotSelectorPrefab;
 		[SerializeField] private TMP_Text robotSelectorAmount;
 		[SerializeField] private TMP_InputField roundsInput;
 		[SerializeField] private GameObject dropdownsParent;
 
-		private TMP_Dropdown[] robotSelectors;
+		private RobotSelector[] robotSelectors;
 
 		void Start () {
-			robotSelectors = new TMP_Dropdown[Constants.MAX_BOTS_PER_MATCH];
+			robotSelectors = new RobotSelector[Constants.MAX_BOTS_PER_MATCH];
 			for(int i = 0; i < Constants.MAX_BOTS_PER_MATCH; i++){
-				TMP_Dropdown aRobotSelector = Instantiate(robotSelectorPrefab);
+				RobotSelector aRobotSelector = Instantiate(robotSelectorPrefab);
 				aRobotSelector.transform.SetParent(dropdownsParent.transform, false);
 				robotSelectors[i] = aRobotSelector;
 			}
@@ -36,7 +36,7 @@ namespace BotArena {
 		public void StartMatch(){
 			List<string> selectedRobots = robotSelectors
 				.Where(selector => selector.gameObject.activeInHierarchy)
-				.Select(selector => selector.options[selector.value].text)
+				.Select(selector => selector.GetSelectedRobot())
 				.ToList();
 			DataManager.SetRobots(selectedRobots);
 			DataManager.SetRounds(Int32.Parse(roundsInput.text));

@@ -1,4 +1,4 @@
-﻿using BotArena;
+using BotArena;
 using UnityEngine;
 
 namespace DefaultBots {
@@ -12,8 +12,16 @@ namespace DefaultBots {
         }
 
         public override void OnRobotDetected(RobotInfo robotInfo) {
+						var desiredRot = info.position - robotInfo.position;
+						var gunForward = Quaternion.Euler(info.gunRotation) * Vector3.forward;
+						var angle = Vector3.Angle(gunForward, desiredRot);
+						
+						Debug.Log(gunForward.ToString());
+						Debug.Log(desiredRot.ToString());
+						Debug.Log(angle.ToString());
+						Debug.Log("-----------------------------");
             Attack(info, robotInfo, order);
-            order.AddCommand(Command.ROTATEGUN, 0);
+            order.AddCommand(Command.ROTATEGUN, angle);
         }
 	
 		public void Attack(RobotInfo attacker, RobotInfo robot, Order order){

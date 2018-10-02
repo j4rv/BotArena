@@ -18,5 +18,9 @@ namespace BotArena {
 			dropdown.RefreshShownValue();
 		}
 		
+		public string GetSelectedRobot () {
+			return dropdown.options[dropdown.value].text;
+		}
+		
 	}
 }
