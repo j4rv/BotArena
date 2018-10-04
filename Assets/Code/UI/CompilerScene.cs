@@ -54,7 +54,7 @@ namespace BotArena {
 			string sourceCode = input.text;
 			try {
 				IRobot robot = compiler.CompileAndCreateInstance(sourceCode);
-				SourceFiles.Save(robot.name + ".cs", sourceCode);
+				SourceFiles.Save(robot.GetType().Name + ".cs", sourceCode);
 				results.text = $"Saved robot {robot} successfully.";
 			} catch (CompilationException e) {
 				ClearResults();

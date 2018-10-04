@@ -10,6 +10,7 @@ namespace BotArena {
     public static readonly string PATH = DataManager.ROBOTS_PATH;
 
     public static string[] FileNames(){
+      new System.IO.FileInfo(PATH).Directory.Create();
       return Directory.GetFiles(PATH, "*.cs", SearchOption.TopDirectoryOnly)
         .Select(path => path.Substring(PATH.Length, path.Length - PATH.Length))
         .ToArray();;
@@ -17,8 +18,6 @@ namespace BotArena {
 
     public static void Save(string filename, string sourceCode){
       string fullPath = Path.Combine(PATH, filename);
-      /*FileStream file = File.Create(fullPath);
-      file.Close();*/
       new System.IO.FileInfo(PATH).Directory.Create();
       File.WriteAllText(fullPath, sourceCode);
     }
