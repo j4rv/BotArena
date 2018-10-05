@@ -18,8 +18,9 @@ namespace BotArena {
 		
 		public static void SetRobots(List<string> robotNames){
 			robotsMatchData = new List<PlayerMatchData>();
+			var compiler = new Compiler<IRobot>();
 			foreach(string robotName in robotNames){
-				var robot = RobotCompiler.compiler.CompileAndCreateFromFilename(robotName);
+				var robot = compiler.CompileAndCreateFromFilename(robotName);
 				robotsMatchData.Add(new PlayerMatchData(robot.name, robot, null));
 			}			
 		}

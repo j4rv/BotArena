@@ -4,7 +4,7 @@ using UnityEngine;
 using TMPro;
 
 namespace BotArena { 
-	public class RobotSelector : MonoBehaviour {
+	public class RobotSelectorController : MonoBehaviour {
 
 		private TMP_Dropdown dropdown;
 		private static readonly TMP_Dropdown.OptionData NO_OPTIONS = new TMP_Dropdown.OptionData();

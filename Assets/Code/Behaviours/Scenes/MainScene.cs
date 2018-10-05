@@ -7,7 +7,7 @@ namespace BotArena {
 	public class MainScene : MonoBehaviour {
 
 		public Button editButton;
-		public RobotSelector robotToEdit;
+		public RobotSelectorController robotToEdit;
 
 		void Start(){
 			if(robotToEdit.HasNoOptions()){

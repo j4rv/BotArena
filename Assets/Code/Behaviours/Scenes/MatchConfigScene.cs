@@ -8,20 +8,20 @@ using UnityEngine.SceneManagement;
 using System;
 
 namespace BotArena { 
-	public class MatchConfigUI : MonoBehaviour {
+	public class MatchConfigScene : MonoBehaviour {
 
 		[SerializeField] private Slider botsAmount;
-		[SerializeField] private RobotSelector robotSelectorPrefab;
+		[SerializeField] private RobotSelectorController robotSelectorPrefab;
 		[SerializeField] private TMP_Text robotSelectorAmount;
 		[SerializeField] private TMP_InputField roundsInput;
 		[SerializeField] private GameObject dropdownsParent;
 
-		private RobotSelector[] robotSelectors;
+		private RobotSelectorController[] robotSelectors;
 
 		void Start () {
-			robotSelectors = new RobotSelector[Constants.MAX_BOTS_PER_MATCH];
+			robotSelectors = new RobotSelectorController[Constants.MAX_BOTS_PER_MATCH];
 			for(int i = 0; i < Constants.MAX_BOTS_PER_MATCH; i++){
-				RobotSelector aRobotSelector = Instantiate(robotSelectorPrefab);
+				RobotSelectorController aRobotSelector = Instantiate(robotSelectorPrefab);
 				aRobotSelector.transform.SetParent(dropdownsParent.transform, false);
 				robotSelectors[i] = aRobotSelector;
 			}
