@@ -9,15 +9,12 @@ namespace BotArena {
 
         [SerializeField]
         public GameObject original;
-        Transform poolParent;
-        List<GameObject> pooledObjects;
-
-        Pool(){}
+        readonly Transform poolParent;
+        readonly List<GameObject> pooledObjects;
 
         public Pool(GameObject original){
             poolParent = new GameObject(original.name+"Pool").transform;
             pooledObjects = new List<GameObject>();
-            Debug.Log(pooledObjects);
             this.original = original;
         }
 

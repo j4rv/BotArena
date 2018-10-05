@@ -8,12 +8,12 @@ using TMPro;
 using UnityEngine;
 
 namespace BotArena { 
-public class Compiler<T> {
+public class Compiler<T> where T : class {
 
   private readonly List<String> errors;
   private readonly TextMeshProUGUI errorsContainer;
   private readonly CSharpCodeProvider csProvider;
-  private readonly T NULL_T = default(T);
+  private static readonly T UNDEFINED_T = default(T);
   private readonly string MORE_THAN_ONE_CLASS_IN_SOURCE_ERROR = $"Found more than one class of type {typeof(T)} in source code, this is not allowed";
   private readonly string NO_CLASS_IN_SOURCE_ERROR = $"No exported class of type {typeof(T)} in source code";
 
@@ -40,7 +40,7 @@ public class Compiler<T> {
     var compilerResults = CompileCSharpCode(source);
 		T processedResult = ProcessCompilerResults(compilerResults);
 
-    if(processedResult == null){
+    if(processedResult == UNDEFINED_T){
       errors.Add(NO_CLASS_IN_SOURCE_ERROR);
       UpdateErrorsUI();
       throw new CompilationException(NO_CLASS_IN_SOURCE_ERROR, source);
@@ -64,7 +64,7 @@ public class Compiler<T> {
   }
 
   private T ProcessCompilerResults(CompilerResults compilerResults){
-    T result = NULL_T;
+    T result = UNDEFINED_T;
     if(compilerResults.Errors.HasErrors){
 			foreach(CompilerError err in compilerResults.Errors){
 				errors.Add($"({err.Line}:{err.Column}) {err.ErrorText}");
@@ -82,10 +82,10 @@ public class Compiler<T> {
   }
 
   private T CreateInstanceFromCompilerResults(CompilerResults compilerResults) {
-    T instance = NULL_T;
+    T instance = UNDEFINED_T;
     foreach (Type type in compilerResults.CompiledAssembly.GetExportedTypes()){
       if(typeof(T).IsAssignableFrom(type)){
-        if (instance != null) {
+        if (instance != UNDEFINED_T) {
           throw new CompilationException(MORE_THAN_ONE_CLASS_IN_SOURCE_ERROR);
         }
         instance = (T) Activator.CreateInstance(type);

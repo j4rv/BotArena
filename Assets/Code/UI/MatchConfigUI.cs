@@ -27,11 +27,6 @@ namespace BotArena {
 			}
 			UpdateDropdownsParent();
 		}
-		
-		// Update is called once per frame
-		void Update () {
-			
-		}
 
 		public void StartMatch(){
 			List<string> selectedRobots = robotSelectors

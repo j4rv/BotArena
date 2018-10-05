@@ -5,7 +5,7 @@ namespace BotArena
     internal abstract class ICommand
     {
         protected internal RobotController robotController;
-        protected bool cancellable = false;
+        protected bool cancellable; // commands are not cancellable by default
 
         public bool Call() {
             if (CanExecute()) {

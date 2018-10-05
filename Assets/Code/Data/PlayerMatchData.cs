@@ -3,7 +3,7 @@
 namespace BotArena { 
     class PlayerMatchData {
 
-        static readonly Dictionary<MatchResult, int> RESULT_POINTS = new Dictionary<MatchResult, int>() {
+        static readonly Dictionary<MatchResult, int> RESULT_POINTS = new Dictionary<MatchResult, int> {
             { MatchResult.VICTORY, 100 },
             { MatchResult.DRAW, 50 },
             { MatchResult.LOSS, 0 }

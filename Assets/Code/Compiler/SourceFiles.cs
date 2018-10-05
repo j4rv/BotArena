@@ -5,7 +5,7 @@ using UnityEngine;
 using System.Linq;
 
 namespace BotArena { 
-  public class SourceFiles {
+  public static class SourceFiles {
 
     public static readonly string PATH = DataManager.ROBOTS_PATH;
 
@@ -13,7 +13,7 @@ namespace BotArena {
       new System.IO.FileInfo(PATH).Directory.Create();
       return Directory.GetFiles(PATH, "*.cs", SearchOption.TopDirectoryOnly)
         .Select(path => path.Substring(PATH.Length, path.Length - PATH.Length))
-        .ToArray();;
+        .ToArray();
     }
 
     public static void Save(string filename, string sourceCode){
