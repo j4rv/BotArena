@@ -1,5 +1,6 @@
 using System;
 
+namespace BotArena {
 [Serializable]
 public class SourceData {
   public string author;
@@ -13,4 +14,5 @@ public class SourceData {
   override public string ToString(){
     return $"/* author: {author} */\n\n{code}";
   }
+}
 }

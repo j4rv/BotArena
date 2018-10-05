@@ -1,6 +1,7 @@
 using System;
 using System.Runtime;
 
+namespace BotArena {
 public class CompilationException : Exception{
   private string sourceCode;
   public CompilationException() { }
@@ -10,4 +11,5 @@ public class CompilationException : Exception{
   protected CompilationException(
     System.Runtime.Serialization.SerializationInfo info,
     System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
+}
 }

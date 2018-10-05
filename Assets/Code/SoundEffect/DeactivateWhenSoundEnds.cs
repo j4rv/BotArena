@@ -1,6 +1,7 @@
 ﻿
 using UnityEngine;
 
+namespace BotArena { 
 public class DeactivateWhenSoundEnds : MonoBehaviour {
 
     [SerializeField]
@@ -16,4 +17,5 @@ public class DeactivateWhenSoundEnds : MonoBehaviour {
         }
 	}
 
+}
 }
